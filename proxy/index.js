@@ -21,6 +21,11 @@ var server = require('http').createServer(function(req, res) {
                 target: 'http://localhost:3000'
             });
             break;
+        case 'weixin.miaowang.xyz':
+            proxy.web(req, res, {
+                target: 'http://localhost:3001'
+            });
+            break;
         case 'blog.miaowang.xyz':
             proxy.web(req, res, {
                 target: 'http://www.cnblogs.com/jes_shaw/'
@@ -29,12 +34,17 @@ var server = require('http').createServer(function(req, res) {
         case 'sanfor.com.cn':
         case 'www.sanfor.com.cn':
             proxy.web(req, res, {
-                target: 'http://localhost:81'
+                target: 'http://localhost:3000'
+            });
+            break;
+        case 'weixin.sanfor.com.cn':
+            proxy.web(req, res, {
+                target: 'http://localhost:3001'
             });
             break;
         case 'demo.sanfor.com.cn':
             proxy.web(req, res, {
-                target: 'http://localhost:89'
+                target: 'http://localhost:4002'
             });
             break;
         default:
