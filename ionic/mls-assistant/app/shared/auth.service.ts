@@ -10,6 +10,7 @@ declare var Auth0Lock: any;
 
 // https://auth0.com/docs/quickstart/native/ionic2
 // http://www.joshmorony.com/building-a-review-app-with-ionic-2-mongodb-node/
+// https://github.com/aaronksaunders/ionic2-tabs-login-sample
 
 @Injectable()
 export class AuthService {
