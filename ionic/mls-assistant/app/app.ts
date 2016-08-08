@@ -1,6 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, provide } from '@angular/core';
 import { ionicBootstrap, Platform, Nav } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
+
+import {Http} from '@angular/http';
+import {AuthHttp, AuthConfig} from 'angular2-jwt';
+import {AuthService} from './shared/auth.service';
 
 import { HTTP_PROVIDERS } from '@angular/http';
 
@@ -34,7 +38,7 @@ class MyApp {
 
 	pages: Array<{ title: string, component: any }>;
 
-	constructor(public platform: Platform) {
+	constructor(public platform: Platform, private auth: AuthService) {
 		this.initializeApp();
 
 		// used for an example of ngFor and navigation
@@ -54,6 +58,12 @@ class MyApp {
 			// Okay, so the platform is ready and our plugins are available.
 			// Here you can do any higher level native things you might need.
 			StatusBar.styleDefault();
+
+			// When the app starts up, there might be a valid
+			// token in local storage. If there is, we should
+			// schedule an initial token refresh for when the
+			// token expires
+			this.auth.startupTokenRefresh();
 		});
 	}
 
@@ -65,6 +75,13 @@ class MyApp {
 }
 
 ionicBootstrap(MyApp, [
+	provide(AuthHttp, {
+		useFactory: (http) => {
+			return new AuthHttp(new AuthConfig({ noJwtError: true }), http);
+		},
+		deps: [Http]
+	}),
+	AuthService,
     HTTP_PROVIDERS,
 	{ provide: XHRBackend, useClass: InMemoryBackendService }, // in-mem server
     { provide: SEED_DATA, useClass: InMemoryDataService }      // in-mem server data]
