@@ -5,33 +5,58 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
-  <ion-navbar *navbar>
-    <ion-title>profile</ion-title>
-  </ion-navbar>
-
+    <ion-navbar *navbar>
+        <ion-title>Profile</ion-title>
+    </ion-navbar>
 </ion-header>
-
-<ion-content padding *ngIf="!auth.authenticated()">
-  
-  <button block (click)="auth.login()">Login</button>
-  
+<ion-content class="login" *ngIf="!auth.authenticated()">
+    <div padding>
+        <ion-segment [(ngModel)]="authType">
+            <ion-segment-button value="login">
+                Login
+            </ion-segment-button>
+            <ion-segment-button value="signup">
+                Signup
+            </ion-segment-button>
+        </ion-segment>
+    </div>
+    <div [ngSwitch]="authType">
+        <form *ngSwitchCase="'login'" #loginCreds="ngForm" (ngSubmit)="login(loginCreds.value)">
+            <ion-item>
+                <ion-label>Username</ion-label>
+                <ion-input type="text" ngControl="username"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>Password</ion-label>
+                <ion-input type="password" ngControl="password"></ion-input>
+            </ion-item>
+            <div padding>
+                <button block type="submit">Login</button>
+            </div>
+        </form>
+        <form *ngSwitchCase="'signup'" #signupCreds="ngForm" (ngSubmit)="signup(signupCreds.value)">
+            <ion-item>
+                <ion-label>Username</ion-label>
+                <ion-input type="text" ngControl="username"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label>Password</ion-label>
+                <ion-input type="password" ngControl="password"></ion-input>
+            </ion-item>
+            <div padding>
+                <button block type="submit">Signup</button>
+            </div>
+        </form>
+    </div>
+    <div padding>
+        <p *ngIf="error" class="error">{{ error._body }}</p>
+    </div>
 </ion-content>
-
-<ion-content padding *ngIf="auth.authenticated()">  
-  
-  <ion-card>
-
-    <ion-item *ngIf="auth.user">
-      <ion-avatar item-left>
-        <img src="{{ auth.user.picture }}">
-      </ion-avatar>
-      <h2>{{ auth.user.nickname }}</h2>
-      <p>{{ auth.user.email }}</p>
-    </ion-item>
-  
-  </ion-card>
-  
-  <button block (click)="auth.logout()">Logout</button>
-  
+<ion-content>
+    <div *ngIf="auth.authenticated()">
+        <div padding>
+            <h1>Welcome, {{ user }}</h1>
+            <button block (click)="logout()">Logout</button>
+        </div>
+    </div>
 </ion-content>

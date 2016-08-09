@@ -17,6 +17,8 @@ import { HomeworkService } from './shared/homework.service';
 import './shared/rxjs-extensions';
 
 // import {HomeworkPage} from './pages/homework/homework';
+
+import {ProfilePage} from './pages/profile/profile';
 import {HomeworksPage} from './pages/homeworks/homeworks';
 import {ExercisesPage} from './pages/exercises/exercises';
 import {ReviewingExercisesPage} from './pages/reviewing-exercises/reviewing-exercises';
@@ -28,7 +30,14 @@ import { Page2 } from './pages/page2/page2';
 @Component({
 	templateUrl: 'build/app.html',
 	providers: [
-		HomeworkService,
+		provide(AuthHttp, {
+			useFactory: (http) => {
+				return new AuthHttp(new AuthConfig, http);
+			},
+			deps: [Http]
+		}),
+		AuthService,
+		HomeworkService
 	]
 })
 class MyApp {
@@ -43,6 +52,8 @@ class MyApp {
 
 		// used for an example of ngFor and navigation
 		this.pages = [
+
+			{ title: '设置', component: ProfilePage },
 			{ title: '课后作业', component: HomeworksPage },
 			{ title: '练习', component: ExercisesPage },
 			{ title: '复习', component: ReviewingExercisesPage }
@@ -59,11 +70,9 @@ class MyApp {
 			// Here you can do any higher level native things you might need.
 			StatusBar.styleDefault();
 
-			// When the app starts up, there might be a valid
-			// token in local storage. If there is, we should
-			// schedule an initial token refresh for when the
-			// token expires
-			this.auth.startupTokenRefresh();
+			if (!this.auth.authenticated()) {
+				this.rootPage = ProfilePage;
+			}
 		});
 	}
 
@@ -75,13 +84,6 @@ class MyApp {
 }
 
 ionicBootstrap(MyApp, [
-	provide(AuthHttp, {
-		useFactory: (http) => {
-			return new AuthHttp(new AuthConfig({ noJwtError: true }), http);
-		},
-		deps: [Http]
-	}),
-	AuthService,
     HTTP_PROVIDERS,
 	{ provide: XHRBackend, useClass: InMemoryBackendService }, // in-mem server
     { provide: SEED_DATA, useClass: InMemoryDataService }      // in-mem server data]
