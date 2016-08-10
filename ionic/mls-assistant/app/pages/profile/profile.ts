@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, Storage, LocalStorage } from 'ionic-angular';
 import {Http, Headers} from '@angular/http';
-import {FORM_DIRECTIVES} from '@angular/common';
+import {CORE_DIRECTIVES, FORM_DIRECTIVES} from '@angular/common';
 import {JwtHelper} from 'angular2-jwt';
 import {AuthService} from '../../shared/auth.service';
 import 'rxjs/add/operator/map';
@@ -18,6 +18,7 @@ import 'rxjs/add/operator/map';
 */
 @Component({
 	templateUrl: 'build/pages/profile/profile.html',
+	directives: [CORE_DIRECTIVES, FORM_DIRECTIVES]
 })
 export class ProfilePage {
 
@@ -37,7 +38,7 @@ export class ProfilePage {
 	user: string;
 
 	constructor(private http: Http, private auth: AuthService) {
-		
+
 		let token;
 		this.local.get('id_token').then(profile => {
 			token = JSON.parse(profile);
