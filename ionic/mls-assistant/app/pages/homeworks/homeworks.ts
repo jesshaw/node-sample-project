@@ -27,22 +27,22 @@ export class HomeworksPage {
 			'american-football', 'boat', 'bluetooth', 'build'];
 
 		this.items = [];
-
-		this.homeworkService.getHomeworks()
-            .then(homeworks => {
-				for (var i = 0; i < homeworks.length; ++i) {
-					var currentHomework = homeworks[i];
-					var title = this.homeworkService.getTitle(currentHomework.catgory);
-					this.items.push({
-						id:currentHomework.id,
-						title: title,
-						note: currentHomework.date,
-						icon: this.icons[Math.floor(Math.random() * this.icons.length)]
-					});
-				}
-            })
-			.catch(error => this.error = error);
-
+		debugger;
+		this.homeworkService.getAllHomeworks()
+		this.homeworks=this.homeworkService.homeworks
+   //          .then(homeworks => {
+			// 	for (var i = 0; i < homeworks.length; ++i) {
+			// 		var currentHomework = homeworks[i];
+			// 		var title = this.homeworkService.getTitle(currentHomework.catgory);
+			// 		this.items.push({
+			// 			id:currentHomework.id,
+			// 			title: title,
+			// 			note: currentHomework.date,
+			// 			icon: this.icons[Math.floor(Math.random() * this.icons.length)]
+			// 		});
+			// 	}
+   //          })
+			// .catch(error => this.error = error);
 	}
 
 	itemTapped(event, item) {

@@ -8,13 +8,13 @@ import {AuthService} from './shared/auth.service';
 
 import { HTTP_PROVIDERS } from '@angular/http';
 
-import { XHRBackend } from '@angular/http';
-import { InMemoryBackendService, SEED_DATA } from 'angular2-in-memory-web-api';
+// import { XHRBackend } from '@angular/http';
+// import { InMemoryBackendService, SEED_DATA } from 'angular2-in-memory-web-api';
 
-import { InMemoryDataService }  from './shared/in-memory-data.service';
+// import { InMemoryDataService }  from './shared/in-memory-data.service';
 import { HomeworkService } from './shared/homework.service';
 
-import './shared/rxjs-extensions';
+// import './shared/rxjs-extensions';
 
 // import {HomeworkPage} from './pages/homework/homework';
 
@@ -36,8 +36,8 @@ import { Page2 } from './pages/page2/page2';
 			},
 			deps: [Http]
 		}),
-		AuthService,
-		HomeworkService
+		AuthService
+		, HomeworkService
 	]
 })
 class MyApp {
@@ -84,7 +84,7 @@ class MyApp {
 }
 
 ionicBootstrap(MyApp, [
-    HTTP_PROVIDERS,
-	{ provide: XHRBackend, useClass: InMemoryBackendService }, // in-mem server
-    { provide: SEED_DATA, useClass: InMemoryDataService }      // in-mem server data]
+    HTTP_PROVIDERS
+    // ,	{ provide: XHRBackend, useClass: InMemoryBackendService }, // in-mem server
+    // { provide: SEED_DATA, useClass: InMemoryDataService }      // in-mem server data]
 ]);

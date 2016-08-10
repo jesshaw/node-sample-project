@@ -7,14 +7,14 @@ import { Homework } from './homework';
 @Injectable()
 export class HomeworkService {
 
-	private homeworksUrl = 'app/homeworks';  // URL to web api
-
+	homeworksUrl: string = "http://localhost:3001/api/homeworks";
+	homeworks: Homework[];
 	constructor(private http: Http) { }
 
 	getAllHomeworks() {
 		return this.http.get(this.homeworksUrl)
 			.toPromise()
-			.then(response => response.json().data as Homework[])
+			.then(response => this.homeworks= response.json().data as Homework[])
 			.catch(this.handleError);
 	}
 
@@ -46,8 +46,7 @@ export class HomeworkService {
 		return title;
 	}
 
-
-	private getHomeworksByCategory(catgory:string) {
+	private getHomeworksByCategory(catgory: string) {
 		return this.getAllHomeworks().then(homeworks =>
 			homeworks.filter(homework => homework.catgory === catgory)
 		);

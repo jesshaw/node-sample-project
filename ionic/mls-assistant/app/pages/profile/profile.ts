@@ -51,6 +51,8 @@ export class ProfilePage {
 		}
 	}
 
+//curl --data "username=gonto&password=gonto" http://localhost:3001/sessions/create
+
 	login(credentials) {
 		this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
 			.map(res => res.json())
