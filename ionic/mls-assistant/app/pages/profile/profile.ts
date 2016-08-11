@@ -41,17 +41,19 @@ export class ProfilePage {
 
 		let token;
 		this.local.get('id_token').then(profile => {
-			token = JSON.parse(profile);
+			// token = JSON.parse(profile);
+			token = profile;
+			if (token) {
+				this.user = this.jwtHelper.decodeToken(token).username;
+			}
 		}).catch(error => {
 			console.log(error);
 		});
 
-		if (token) {
-			this.user = this.jwtHelper.decodeToken(token).username;
-		}
+
 	}
 
-//curl --data "username=gonto&password=gonto" http://localhost:3001/sessions/create
+	//curl --data "username=gonto&password=gonto" http://localhost:3001/sessions/create
 
 	login(credentials) {
 		this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })

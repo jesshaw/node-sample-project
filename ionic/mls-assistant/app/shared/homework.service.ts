@@ -8,16 +8,20 @@ import { Homework } from './homework';
 export class HomeworkService {
 
 	homeworksUrl: string = "http://localhost:3001/api/homeworks";
-	homeworks: Homework[];
+
+	contentHeader: Headers = new Headers({ "Content-Type": "application/json" });
 	constructor(private http: Http) { }
 
 	getAllHomeworks() {
-		return this.http.get(this.homeworksUrl)
+		return this.http.get(this.homeworksUrl, { headers: this.contentHeader })
 			.toPromise()
-			.then(response => this.homeworks= response.json().data as Homework[])
+			.then(response => {
+				console.log(response.json());
+				return response.json() as Homework[];
+			})
 			.catch(this.handleError);
-	}
 
+	}
 	getHomeworks() {
 		return this.getHomeworksByCategory("1");
 	}
@@ -29,6 +33,8 @@ export class HomeworkService {
 	}
 
 	getHomework(id: number) {
+
+		// return this.homeworks.find(homework => homework.id === id);
 		return this.getAllHomeworks()
 			.then(homeworks =>
 				homeworks.find(homework => homework.id === id) //返回一个实体值
