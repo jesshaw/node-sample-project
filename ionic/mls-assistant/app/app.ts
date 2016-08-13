@@ -19,6 +19,7 @@ import { HomeworkService } from './shared/homework.service';
 // import {HomeworkPage} from './pages/homework/homework';
 
 import {ProfilePage} from './pages/profile/profile';
+import {LoginPage} from './pages/login/login';
 import {HomeworksPage} from './pages/homeworks/homeworks';
 import {ExercisesPage} from './pages/exercises/exercises';
 import {ReviewingExercisesPage} from './pages/reviewing-exercises/reviewing-exercises';
@@ -42,8 +43,6 @@ import { Page2 } from './pages/page2/page2';
 })
 class MyApp {
 	@ViewChild(Nav) nav: Nav;
-
-	loginPage: any = ProfilePage;
 
 	rootPage: any = HomeworksPage;
 

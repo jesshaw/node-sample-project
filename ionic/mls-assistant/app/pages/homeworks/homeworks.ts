@@ -18,7 +18,7 @@ export class HomeworksPage {
 	error: any;
 	homeworks: Homework[];
 	icons: string[];
-	items: Array<{ id:number,title: string, note: string, icon: string }>;
+	items: Array<{ id:number,title: string, note:string, icon: string }>;
 
 	constructor(public nav: NavController, private homeworkService: HomeworkService) {
 

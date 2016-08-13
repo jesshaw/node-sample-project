@@ -5,9 +5,12 @@ var logger          = require('morgan'),
     errorhandler    = require('errorhandler'),
     cors            = require('cors'),
     dotenv          = require('dotenv'),
-    bodyParser      = require('body-parser');
+    bodyParser      = require('body-parser'),
+    mongoose        = require('mongoose');
 
 var app = express();
+var uri = 'mongodb://127.0.0.1:27017/test';
+global.db = mongoose.createConnection(uri);
 
 dotenv.load();
 

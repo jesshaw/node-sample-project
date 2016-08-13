@@ -1,16 +1,15 @@
 <!--
-  Generated template for the ProfilePage page.
+  Generated template for the LoginPage page.
 
   See http://ionicframework.com/docs/v2/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-
 <ion-header>
     <ion-navbar>
         <button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title>设置</ion-title>
+        <ion-title>喵老师助手</ion-title>
     </ion-navbar>
 </ion-header>
 <ion-content class="login" *ngIf="!auth.authenticated()">
@@ -54,13 +53,5 @@
     </div>
     <div padding>
         <p *ngIf="error" class="error">{{ error._body }}</p>
-    </div>
-</ion-content>
-<ion-content *ngIf="auth.authenticated()">
-    <div>
-        <div padding>
-            <h1>欢迎, {{ user }}</h1>
-            <button block (click)="logout()">退出</button>
-        </div>
     </div>
 </ion-content>

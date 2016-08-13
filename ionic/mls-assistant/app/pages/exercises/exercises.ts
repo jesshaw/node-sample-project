@@ -19,7 +19,7 @@ export class ExercisesPage {
  error: any;
 	homeworks: Homework[];
 	icons: string[];
-	items: Array<{ id:number,title: string, note: string, icon: string }>;
+	items: Array<{ id:number,title: string, note: Date, icon: string }>;
 
 	constructor(public nav: NavController, private homeworkService: HomeworkService) {
 
@@ -37,7 +37,7 @@ export class ExercisesPage {
 					this.items.push({
 						id:currentHomework.id,
 						title: title,
-						note: currentHomework.date,
+						note: new Date(currentHomework.date),
 						icon: this.icons[Math.floor(Math.random() * this.icons.length)]
 					});
 				}
