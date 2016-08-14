@@ -19,6 +19,7 @@ import { HomeworkService } from './shared/homework.service';
 // import {HomeworkPage} from './pages/homework/homework';
 
 import {ProfilePage} from './pages/profile/profile';
+import {WeixinLoginPage} from './pages/weixin-login/weixin-login';
 import {LoginPage} from './pages/login/login';
 import {HomeworksPage} from './pages/homeworks/homeworks';
 import {ExercisesPage} from './pages/exercises/exercises';
@@ -72,8 +73,12 @@ class MyApp {
 			StatusBar.styleDefault();
 
 			if (!this.auth.authenticated()) {
-				this.rootPage = ProfilePage;
+				// debugger;
+				// console.log(location.href);
+				// this.rootPage = ProfilePage;
+				this.rootPage=WeixinLoginPage;
 			}
+
 		});
 	}
 

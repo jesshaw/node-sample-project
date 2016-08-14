@@ -9,7 +9,8 @@ var app = module.exports = express.Router();
 var users = [{
   id: 1,
   username: 'test',
-  password: 'test'
+  password: 'test',
+  roles:'student,class1'
 }];
 
 function createToken(user) {

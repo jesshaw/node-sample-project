@@ -36,6 +36,7 @@ export class ProfilePage {
 	jwtHelper: JwtHelper = new JwtHelper();
 	local: Storage = new Storage(LocalStorage);
 	user: string;
+	roles:string;
 
 	constructor(private http: Http, private auth: AuthService) {
 
@@ -45,6 +46,7 @@ export class ProfilePage {
 			token = profile;
 			if (token) {
 				this.user = this.jwtHelper.decodeToken(token).username;
+				this.roles=this.jwtHelper.decodeToken(token).roles;
 			}
 		}).catch(error => {
 			console.log(error);
