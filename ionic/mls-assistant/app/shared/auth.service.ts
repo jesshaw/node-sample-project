@@ -3,8 +3,6 @@ import {Http, Headers} from '@angular/http';
 import { NavController, Storage, LocalStorage } from 'ionic-angular';
 import {JwtHelper, tokenNotExpired} from 'angular2-jwt';
 
-import { HomeworksPage } from '../pages/homeworks/homeworks';
-
 // https://github.com/auth0-blog/angular2-authentication-sample
 // https://github.com/auth0-blog/ionic2-auth
 
