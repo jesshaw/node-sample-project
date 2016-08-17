@@ -2,21 +2,14 @@ import { Component, ViewChild, provide } from '@angular/core';
 import { ionicBootstrap, Platform, Nav } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
-import {Http} from '@angular/http';
+import {Http, HTTP_PROVIDERS, URLSearchParams} from '@angular/http';
 import {AuthHttp, AuthConfig} from 'angular2-jwt';
 import {AuthService} from './shared/auth.service';
 
-import { HTTP_PROVIDERS } from '@angular/http';
 
-// import { XHRBackend } from '@angular/http';
-// import { InMemoryBackendService, SEED_DATA } from 'angular2-in-memory-web-api';
-
-// import { InMemoryDataService }  from './shared/in-memory-data.service';
 import { HomeworkService } from './shared/homework.service';
 
-// import './shared/rxjs-extensions';
 
-// import {HomeworkPage} from './pages/homework/homework';
 
 import {ProfilePage} from './pages/profile/profile';
 import {WeixinLoginPage} from './pages/weixin-login/weixin-login';
@@ -27,6 +20,7 @@ import {ReviewingExercisesPage} from './pages/reviewing-exercises/reviewing-exer
 
 import { Page1 } from './pages/page1/page1';
 import { Page2 } from './pages/page2/page2';
+import {Util} from './shared/util';
 
 
 @Component({
@@ -72,11 +66,24 @@ class MyApp {
 			// Here you can do any higher level native things you might need.
 			StatusBar.styleDefault();
 
+
+			console.log(location);
+
+			// http://localhost:8100/#/wxlogin?wxusername=test&random=123123
+			console.log(Util.getParameterByName("wxusername"));
+			console.log(Util.getParameterByName("random"));
+
 			if (!this.auth.authenticated()) {
+				var i = location.hash.indexOf("?");
+				if (location.hash.substring(2, i) === "wxlogin") {
+					// code...
+				}
+				else {
+					this.rootPage = ProfilePage;
+				}
 				// debugger;
 				// console.log(location.href);
 				// this.rootPage = ProfilePage;
-				this.rootPage=WeixinLoginPage;
 			}
 
 		});

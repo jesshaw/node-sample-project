@@ -70,26 +70,68 @@ app.post('/users', function(req, res) {
     });
 });
 // {wxUsername:"aa"}
+// curl -H "Content-Type: application/json" -X POST -d '{"wxUsername":"test","random":""}' http://localhost:3001/sessions/create
+// curl -H "Content-Type: application/json" -X POST -d '{"username":"test","password":"666666"}' http://localhost:3001/sessions/create
+
 app.post('/sessions/create', function(req, res) {
 
     var userScheme = getUserScheme(req);
 
-    if (!userScheme.username || !req.body.password) {
+    User.findOne(userScheme.userSearch, function(err, user) {
+        if (err)
+            return console.error(err);
+
+        if (!user) {
+            return res.status(401).send({ message: "The username or password don't match", user: user });
+        }
+
+        switch (userScheme.type) {
+            case "username":
+                if (!userScheme.username || !req.body.password) {
+                    return res.status(400).send("You must send the username and the password");
+                }
+
+                if (user.password !== req.body.password) {
+                    return res.status(401).send("The username or password don't match");
+                }
+                break;
+            case "email":
+                return res.status(401).send("The username or password don't match");
+            case "wx":
+                if (!userScheme.username || !req.body.random) {
+                    return res.status(400).send("You must send the wxUsername and the random");
+                }
+
+                if (user.wxRandom !== req.body.random) {
+                    return res.status(401).send("The username or password don't match");
+                }
+                break;
+            default:
+                return res.status(401).send("The username or password don't match");
+        }
+
+        res.status(201).send({
+            id_token: createToken({
+                username: user.username,
+                roles: user.roles
+            })
+        });
+    });
+});
+
+// curl -H "Content-Type: application/json" -X GET -d '{"wxUsername":"test"}' http://localhost:3001/user
+app.get('/user', function(req, res) {
+
+    var userScheme = getUserScheme(req);
+    if (!userScheme.username) {
         return res.status(400).send("You must send the username and the password");
     }
 
-    var user = _.find(users, userScheme.userSearch);
-
-    if (!user) {
-        return res.status(401).send({ message: "The username or password don't match", user: user });
-    }
-
-    if (user.password !== req.body.password) {
-        return res.status(401).send("The username or password don't match");
-    }
-
-    res.status(201).send({
-        id_token: createToken(user)
+    User.findOne(userScheme.userSearch, function(err, user) {
+        if (err) return console.error(err);
+        res.status(201).send({
+            user
+        });
     });
 });
 
@@ -103,11 +145,10 @@ app.post('/wx/createRandom', function(req, res) {
     User.findOne(userScheme.userSearch, function(err, user1) {
         if (err) return console.error(err);
         console.dir(user1);
-       var user = user1;
+        var user = user1;
 
         var wxRandom = Math.ceil(Math.random() * 10000000);
 
-        console.log(user);
         if (!user) {
             user = new User({
                 username: userScheme.userSearch.wxUsername,
@@ -122,7 +163,7 @@ app.post('/wx/createRandom', function(req, res) {
 
         user.save(function(err, user) {
             if (err) return console.error(err);
-            console.dir(user);
+            //console.dir(user);
         });
 
         res.status(201).send({
