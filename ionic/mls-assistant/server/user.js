@@ -7,4 +7,4 @@ var userSchema = Schema({
     wxRandom: String
 });
 /* global db */
-module.exports = db.model('User', userSchema);
+module.exports = db.model('User', userSchema,'user');

@@ -135,6 +135,8 @@ app.get('/user', function(req, res) {
     });
 });
 
+//curl -H "Content-Type: application/json" -X POST -d '{"wxUsername":"test"}' http://localhost:3001/wx/createRandom
+
 app.post('/wx/createRandom', function(req, res) {
 
     var userScheme = getUserScheme(req);
