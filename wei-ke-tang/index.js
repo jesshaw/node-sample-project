@@ -2,6 +2,7 @@
 
 var express = require('express');
 var Weixin = require('weixin-apis');
+var request = require('request');
 
 var app = express();
 
@@ -44,14 +45,36 @@ weixin.createMenu(menuObj, function(data) {
 });
 
 weixin.on('textMsg', function(data) {
-    var msg = {
-        toUserName: data.fromUserName,
-        fromUserName: data.toUserName,
-        msgType: 'text',
-        content: data.content +' '+ 'sanfor.com.cn'
-    };
 
-    weixin.sendTextMsg(msg);
+    // https://www.npmjs.com/package/request-promise
+    
+    request({
+        url: 'http://localhost:3001/wx/createRandom', //URL to hit
+        // qs: {from: 'blog example', time: +new Date()}, //Query string data
+        method: 'POST',
+        //Lets post the following key/values as form
+        json: {
+            wxname: 'test'
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log(response.statusCode, body);
+            var r = body.random;
+
+            var msg = {
+                toUserName: data.fromUserName,
+                fromUserName: data.toUserName,
+                msgType: 'text',
+                content: data.content + ' ' + 'sanfor.com.cn' + r
+            };
+
+            weixin.sendTextMsg(msg);
+        }
+    });
+
+
 });
 
 app.listen(3001);
