@@ -36,7 +36,7 @@ export class ProfilePage {
 	jwtHelper: JwtHelper = new JwtHelper();
 	local: Storage = new Storage(LocalStorage);
 	user: string;
-	roles:string;
+	roles: string;
 
 	constructor(private http: Http, private auth: AuthService) {
 
@@ -46,7 +46,7 @@ export class ProfilePage {
 			token = profile;
 			if (token) {
 				this.user = this.jwtHelper.decodeToken(token).username;
-				this.roles=this.jwtHelper.decodeToken(token).roles;
+				this.roles = this.jwtHelper.decodeToken(token).roles;
 			}
 		}).catch(error => {
 			console.log(error);
@@ -58,8 +58,9 @@ export class ProfilePage {
 	//curl --data "username=gonto&password=gonto" http://localhost:3001/sessions/create
 
 	login(credentials) {
-		this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
-			.map(res => res.json())
+		this.auth.login(credentials)
+			// this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
+			// 	.map(res => res.json())
 			.subscribe(
 			data => this.authSuccess(data.id_token),
 			err => this.error = err

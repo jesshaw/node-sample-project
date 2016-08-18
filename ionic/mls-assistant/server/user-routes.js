@@ -35,8 +35,8 @@ function getUserScheme(req) {
         username = req.body.email;
         type = 'email';
         userSearch = { email: username };
-    } else if (req.body.wxUsername) {
-        username = req.body.wxUsername;
+    } else if (req.body.wxname) {
+        username = req.body.wxname;
         type = 'wx';
         userSearch = { wxUsername: username };
     }
@@ -70,7 +70,7 @@ app.post('/users', function(req, res) {
     });
 });
 // {wxUsername:"aa"}
-// curl -H "Content-Type: application/json" -X POST -d '{"wxUsername":"test","random":""}' http://localhost:3001/sessions/create
+// curl -H "Content-Type: application/json" -X POST -d '{"wxname":"test","r":""}' http://localhost:3001/sessions/create
 // curl -H "Content-Type: application/json" -X POST -d '{"username":"test","password":"666666"}' http://localhost:3001/sessions/create
 
 app.post('/sessions/create', function(req, res) {
@@ -98,11 +98,11 @@ app.post('/sessions/create', function(req, res) {
             case "email":
                 return res.status(401).send("The username or password don't match");
             case "wx":
-                if (!userScheme.username || !req.body.random) {
+                if (!userScheme.username || !req.body.r) {
                     return res.status(400).send("You must send the wxUsername and the random");
                 }
 
-                if (user.wxRandom !== req.body.random) {
+                if (user.wxRandom !== req.body.r) {
                     return res.status(401).send("The username or password don't match");
                 }
                 break;

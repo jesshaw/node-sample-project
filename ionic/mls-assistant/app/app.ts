@@ -1,26 +1,23 @@
 import { Component, ViewChild, provide } from '@angular/core';
-import { ionicBootstrap, Platform, Nav } from 'ionic-angular';
-import { StatusBar } from 'ionic-native';
-
 import {Http, HTTP_PROVIDERS, URLSearchParams} from '@angular/http';
 import {AuthHttp, AuthConfig} from 'angular2-jwt';
+
+import { ionicBootstrap, Platform, Nav, Storage, LocalStorage } from 'ionic-angular';
+import { StatusBar } from 'ionic-native';
+
+import 'rxjs/add/operator/map';
+
 import {AuthService} from './shared/auth.service';
-
-
 import { HomeworkService } from './shared/homework.service';
-
-
-
+import {Util} from './shared/util';
 import {ProfilePage} from './pages/profile/profile';
 import {WeixinLoginPage} from './pages/weixin-login/weixin-login';
 import {LoginPage} from './pages/login/login';
 import {HomeworksPage} from './pages/homeworks/homeworks';
 import {ExercisesPage} from './pages/exercises/exercises';
 import {ReviewingExercisesPage} from './pages/reviewing-exercises/reviewing-exercises';
-
 import { Page1 } from './pages/page1/page1';
 import { Page2 } from './pages/page2/page2';
-import {Util} from './shared/util';
 
 
 @Component({
@@ -42,20 +39,20 @@ class MyApp {
 	rootPage: any = HomeworksPage;
 
 	pages: Array<{ title: string, component: any }>;
+	error: string;
+	local: Storage = new Storage(LocalStorage);
 
 	constructor(public platform: Platform, private auth: AuthService) {
 		this.initializeApp();
 
 		// used for an example of ngFor and navigation
 		this.pages = [
-
 			{ title: '设置', component: ProfilePage },
 			{ title: '课后作业', component: HomeworksPage },
 			{ title: '练习', component: ExercisesPage },
 			{ title: '复习', component: ReviewingExercisesPage }
-			// ,
-			// { title: 'Page uno', component: Page1 },
-			// { title: 'Page dos', component: Page2 }
+			//,{ title: 'Page uno', component: Page1 }
+			//, { title: 'Page dos', component: Page2 }
 		];
 
 	}
@@ -69,24 +66,32 @@ class MyApp {
 
 			console.log(location);
 
-			// http://localhost:8100/#/wxlogin?wxusername=test&random=123123
-			console.log(Util.getParameterByName("wxusername"));
-			console.log(Util.getParameterByName("random"));
+			// http://localhost:8100/#/wxlogin?wxname=test&r=123123
+			console.log(Util.getParameterByName("wxname"));
+			console.log(Util.getParameterByName("r"));
 
 			if (!this.auth.authenticated()) {
 				var i = location.hash.indexOf("?");
 				if (location.hash.substring(2, i) === "wxlogin") {
-					// code...
+					this.auth.login({
+						wxname: Util.getParameterByName("wxname"),
+						r: Util.getParameterByName("r")
+					}).subscribe(
+						data => this.authSuccess(data.id_token),
+						err => { this.error = err; this.nav.setRoot(ProfilePage); }
+						);
 				}
 				else {
 					this.rootPage = ProfilePage;
 				}
-				// debugger;
-				// console.log(location.href);
-				// this.rootPage = ProfilePage;
 			}
-
 		});
+	}
+
+	authSuccess(token) {
+		this.error = null;
+		this.local.set('id_token', token);
+		this.nav.setRoot(HomeworksPage);
 	}
 
 	openPage(page) {

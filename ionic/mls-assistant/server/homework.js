@@ -1,9 +1,11 @@
 var Schema = require('mongoose').Schema;
 var homeworkSchema = Schema({
-    id: Number,
     catgory: String,
+    theClass: String,
     date: Date,
-    content: String
+    content: String,
+    createTime: Date,
+    updateTime: Date
 });
 /* global db */
-module.exports = db.model('homeworks', homeworkSchema);
+module.exports = db.model('Homework', homeworkSchema, 'homework');

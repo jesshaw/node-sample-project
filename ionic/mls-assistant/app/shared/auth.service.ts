@@ -16,9 +16,12 @@ export class AuthService {
 
 	constructor(private http: Http) { }
 
-	login(credentials) {
+	public login(credentials) {
 		return this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
-			.map(res => res.json());
+			.map(res => {
+				console.log(res);
+				return res.json()
+			});
 	}
 
 	public authenticated() {

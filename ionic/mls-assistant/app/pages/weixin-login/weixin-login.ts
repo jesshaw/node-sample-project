@@ -31,7 +31,7 @@ export class WeixinLoginPage implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
-		this.auth.login({ username: "test", password: "test" }).subscribe(
+		this.auth.login({ username: "test", password: "666666" }).subscribe(
 			data => this.authSuccess(data.id_token),
 			err => this.error = err
 		);
