@@ -19,7 +19,10 @@ import {ProfilePage} from '../profile/profile';
 })
 export class LoginPage {
 
-	@ViewChild(Nav) nav: Nav;
+	// constructor(private nav: NavController,private auth: AuthService) {
+
+	// }
+
 	LOGIN_URL: string = "http://localhost:3001/sessions/create";
 	SIGNUP_URL: string = "http://localhost:3001/users";
 
@@ -30,8 +33,9 @@ export class LoginPage {
 	jwtHelper: JwtHelper = new JwtHelper();
 	local: Storage = new Storage(LocalStorage);
 	user: string;
+	roles: string;
 
-	constructor( private http: Http, private auth: AuthService) {
+	constructor(private http: Http, private auth: AuthService) {
 
 		let token;
 		this.local.get('id_token').then(profile => {
@@ -39,6 +43,7 @@ export class LoginPage {
 			token = profile;
 			if (token) {
 				this.user = this.jwtHelper.decodeToken(token).username;
+				this.roles = this.jwtHelper.decodeToken(token).roles;
 			}
 		}).catch(error => {
 			console.log(error);
@@ -50,14 +55,13 @@ export class LoginPage {
 	//curl --data "username=gonto&password=gonto" http://localhost:3001/sessions/create
 
 	login(credentials) {
-		this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
-			.map(res => res.json())
+		this.auth.login(credentials)
+			// this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
+			// 	.map(res => res.json())
 			.subscribe(
 			data => this.authSuccess(data.id_token),
 			err => this.error = err
 			);
-
-			this.nav.setRoot(ProfilePage);
 	}
 
 	signup(credentials) {

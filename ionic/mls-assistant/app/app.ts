@@ -10,6 +10,7 @@ import 'rxjs/add/operator/map';
 import {AuthService} from './shared/auth.service';
 import { HomeworkService } from './shared/homework.service';
 import {Util} from './shared/util';
+
 import {ProfilePage} from './pages/profile/profile';
 import {WeixinLoginPage} from './pages/weixin-login/weixin-login';
 import {LoginPage} from './pages/login/login';
@@ -47,7 +48,7 @@ class MyApp {
 
 		// used for an example of ngFor and navigation
 		this.pages = [
-			{ title: '设置', component: ProfilePage },
+			{ title: '设置', component: LoginPage },
 			{ title: '课后作业', component: HomeworksPage },
 			{ title: '练习', component: ExercisesPage },
 			{ title: '复习', component: ReviewingExercisesPage }
@@ -66,7 +67,7 @@ class MyApp {
 
 			console.log(location);
 
-			// http://localhost:8100/#/wxlogin?wxname=test&r=123123
+			// http://localhost:8100/#/wxlogin?wxname=test&r=682370
 			console.log(Util.getParameterByName("wxname"));
 			console.log(Util.getParameterByName("r"));
 
@@ -82,7 +83,7 @@ class MyApp {
 						);
 				}
 				else {
-					this.rootPage = ProfilePage;
+					this.rootPage = LoginPage;
 				}
 			}
 		});
@@ -91,7 +92,14 @@ class MyApp {
 	authSuccess(token) {
 		this.error = null;
 		this.local.set('id_token', token);
-		this.nav.setRoot(HomeworksPage);
+		var roles: string = Util.getDecodeObject(token).roles
+		if (roles.indexOf('class') > 0) {
+			this.nav.setRoot(HomeworksPage);
+		}
+		else {
+			this.nav.setRoot(ProfilePage);
+		}
+
 	}
 
 	openPage(page) {

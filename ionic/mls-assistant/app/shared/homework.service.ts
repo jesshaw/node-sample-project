@@ -1,30 +1,32 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http } from '@angular/http';
-
-import { Storage, LocalStorage } from 'ionic-angular';
+import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
 import { Homework } from './homework';
+import {Util} from './util';
 
 @Injectable()
 export class HomeworkService {
-	local: Storage = new Storage(LocalStorage);
 	homeworksUrl: string = "http://localhost:3001/api/protected/homeworks";
-	contentHeader: Headers = new Headers({ "Content-Type": "application/json" });
-
 	constructor(private http: Http) { }
 
 	getAllHomeworks() {
-
-		return this.local.get('id_token')
-			.then(profile => profile).then(token => {
-				this.contentHeader.append("authorization", 'Bearer ' + token);
-				return this.http.get(this.homeworksUrl, { headers: this.contentHeader }).toPromise()
-			}).then(response => {
+		return Util.getAuthContentHeaders()
+			.then(contentHeaders => this.http.get(this.homeworksUrl, { headers: contentHeaders }).toPromise())
+			.then(response => {
 				console.log(response.json());
 				return response.json() as Homework[];
 			});
+
+		// return this.local.get('id_token')
+		// 	.then(profile => profile).then(token => {
+		// 		this.contentHeader.append("authorization", 'Bearer ' + token);
+		// 		return this.http.get(this.homeworksUrl, { headers: this.contentHeader }).toPromise()
+		// 	}).then(response => {
+		// 		console.log(response.json());
+		// 		return response.json() as Homework[];
+		// 	});
 
 
 		// this.local.get('id_token').then(profile => {

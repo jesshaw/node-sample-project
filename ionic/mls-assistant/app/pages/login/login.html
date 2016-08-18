@@ -9,7 +9,7 @@
         <button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title>喵老师助手</ion-title>
+        <ion-title>登录</ion-title>
     </ion-navbar>
 </ion-header>
 <ion-content class="login" *ngIf="!auth.authenticated()">
@@ -53,5 +53,13 @@
     </div>
     <div padding>
         <p *ngIf="error" class="error">{{ error._body }}</p>
+    </div>
+</ion-content>
+<ion-content *ngIf="auth.authenticated()">
+    <div>
+        <div padding>
+            <h1>欢迎, {{ user }}!角色， {{ roles }}</h1>
+            <button block (click)="logout()">退出</button>
+        </div>
     </div>
 </ion-content>
