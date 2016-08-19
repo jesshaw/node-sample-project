@@ -7,6 +7,8 @@ import {AuthService} from '../../shared/auth.service';
 import 'rxjs/add/operator/map';
 
 // const map = require('rxjs/add/operator/map');
+// 
+import {Util} from '../../shared/util';
 
 
 
@@ -22,69 +24,29 @@ import 'rxjs/add/operator/map';
 })
 export class ProfilePage {
 
-	// constructor(private nav: NavController,private auth: AuthService) {
-
-	// }
-
-	LOGIN_URL: string = "http://localhost:3001/sessions/create";
-	SIGNUP_URL: string = "http://localhost:3001/users";
-
-	// When the page loads, we want the Login segment to be selected
-	authType: string = "login";
-	contentHeader: Headers = new Headers({ "Content-Type": "application/json" });
-	error: string;
-	jwtHelper: JwtHelper = new JwtHelper();
-	local: Storage = new Storage(LocalStorage);
 	user: string;
 	roles: string;
+	theClassName: string;
+	theClassValue: string='';
+	classes: Array<{ name: string, value: string }>;
 
 	constructor(private http: Http, private auth: AuthService) {
+		Util.getToken()
+			.then(t => {
+				this.roles = Util.getDecodeObject(t).roles;
+				this.user = Util.getDecodeObject(t).username;
+				this.theClassValue = this.roles.split(',').find(r => r.indexOf('class') > 0);
+				console.log(this.theClassValue);
+			})
 
-		let token;
-		this.local.get('id_token').then(profile => {
-			// token = JSON.parse(profile);
-			token = profile;
-			if (token) {
-				this.user = this.jwtHelper.decodeToken(token).username;
-				this.roles = this.jwtHelper.decodeToken(token).roles;
-			}
-		}).catch(error => {
-			console.log(error);
-		});
-
-
+		this.classes = [];
+		this.classes.push({ name: '一班', value: 'class1' });
+		this.classes.push({ name: '二班', value: 'class2' });
+		this.classes.push({ name: '三班', value: 'class3' });
 	}
 
-	//curl --data "username=gonto&password=gonto" http://localhost:3001/sessions/create
-
-	login(credentials) {
-		this.auth.login(credentials)
-			// this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
-			// 	.map(res => res.json())
-			.subscribe(
-			data => this.authSuccess(data.id_token),
-			err => this.error = err
-			);
+	saveSettings() {
+		console.log(this.theClassValue);
+		this.theClassName = this.classes.find(c => c.value == this.theClassValue).name;
 	}
-
-	signup(credentials) {
-		this.http.post(this.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
-			.map(res => res.json())
-			.subscribe(
-			data => this.authSuccess(data.id_token),
-			err => this.error = err
-			);
-	}
-
-	logout() {
-		this.local.remove('id_token');
-		this.user = null;
-	}
-
-	authSuccess(token) {
-		this.error = null;
-		this.local.set('id_token', token);
-		this.user = this.jwtHelper.decodeToken(token).username;
-	}
-
 }

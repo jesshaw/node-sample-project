@@ -28,6 +28,11 @@ export class Util {
         return jwtHelper.decodeToken(token);
     }
 
+    static getToken(){        
+        var local = new Storage(LocalStorage);
+        return local.get('id_token');
+    }
+
     // // query string: ?foo=lorem&bar=&baz
     // var foo = getParameterByName('foo'); // "lorem"
     // var bar = getParameterByName('bar'); // "" (present with empty value)

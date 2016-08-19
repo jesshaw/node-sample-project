@@ -16,11 +16,15 @@
     <div>
         <div padding>
             <h1>欢迎, {{ user }}!</h1>
-            <ion-list radio-group>
+            <ion-list radio-group [(ngModel)]="theClassValue" (ngModelChange)="saveSettings();">
                 <ion-list-header>
                     请选择班级
                 </ion-list-header>
-                <ion-item>
+                <ion-item *ngFor="let item of classes">
+                    <ion-label>{{item.name}}</ion-label>
+                    <ion-radio checked="true" value="{{item.value}}"></ion-radio>
+                </ion-item>
+               <!--  <ion-item>
                     <ion-label>一班</ion-label>
                     <ion-radio checked="true" value="class1"></ion-radio>
                 </ion-item>
@@ -31,8 +35,9 @@
                 <ion-item>
                     <ion-label>三班</ion-label>
                     <ion-radio value="class3" disabled="true"></ion-radio>
-                </ion-item>
+                </ion-item> -->
             </ion-list>
+            您选择了{{theClassName}}!
             <button block (click)="logout()">退出</button>
         </div>
     </div>

@@ -48,7 +48,7 @@ class MyApp {
 
 		// used for an example of ngFor and navigation
 		this.pages = [
-			{ title: '设置', component: LoginPage },
+			{ title: '设置', component: ProfilePage },
 			{ title: '课后作业', component: HomeworksPage },
 			{ title: '练习', component: ExercisesPage },
 			{ title: '复习', component: ReviewingExercisesPage }
