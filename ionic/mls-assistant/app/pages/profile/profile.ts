@@ -10,6 +10,8 @@ import 'rxjs/add/operator/map';
 // 
 import {Util} from '../../shared/util';
 
+import {LoginPage} from '../login/login';
+
 
 
 /*
@@ -25,17 +27,19 @@ import {Util} from '../../shared/util';
 export class ProfilePage {
 
 	user: string;
-	roles: string;
+	roles: string[];
 	theClassName: string;
-	theClassValue: string='';
+	theClassValue: string = '';
 	classes: Array<{ name: string, value: string }>;
+	error: any;
+	local: Storage = new Storage(LocalStorage);
 
-	constructor(private http: Http, private auth: AuthService) {
+	constructor(private http: Http, private auth: AuthService, private nav: NavController) {
 		Util.getToken()
 			.then(t => {
-				this.roles = Util.getDecodeObject(t).roles;
+				this.roles = Util.getDecodeObject(t).roles.split(',');
 				this.user = Util.getDecodeObject(t).username;
-				this.theClassValue = this.roles.split(',').find(r => r.indexOf('class') > 0);
+				this.theClassValue = this.roles.find(r => r.indexOf('class') >= 0);
 				console.log(this.theClassValue);
 			})
 
@@ -46,7 +50,30 @@ export class ProfilePage {
 	}
 
 	saveSettings() {
+
 		console.log(this.theClassValue);
+
+		var newRoles = this.roles.filter(r => r.indexOf('class') < 0);
+		newRoles.push(this.theClassValue);
+
+		var saveRoles = newRoles.join(',');
+
+		console.log(saveRoles);
+
+		this.auth.saveSettings({ username: this.user, roles: saveRoles })
+			.then(data => this.authSuccess(data.id_token)
+			)
+			.catch(error => this.error = error);;
+	}
+
+	openLoginPage() {
+		this.nav.setRoot(LoginPage);
+	}
+
+	authSuccess(token) {
+		this.error = null;
+		this.local.set('id_token', token);
+
 		this.theClassName = this.classes.find(c => c.value == this.theClassValue).name;
 	}
 }

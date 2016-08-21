@@ -7,10 +7,9 @@ import 'rxjs/add/operator/toPromise';
 export class Util {
 
     static getAuthContentHeaders() {
-        var local = new Storage(LocalStorage);
         var contentHeader = new Headers({ "Content-Type": "application/json" });
 
-        return local.get('id_token')
+        return this.getToken()
             .then(profile => profile)
             .then(token => {
                 contentHeader.append("authorization", 'Bearer ' + token);
@@ -24,11 +23,21 @@ export class Util {
     }
 
     static getDecodeObject(token: string) {
-        var jwtHelper = new JwtHelper()
+        var jwtHelper = new JwtHelper();
         return jwtHelper.decodeToken(token);
     }
 
-    static getToken(){        
+    static getCurrentClass() {
+        return this.getToken()
+            .then(profile => profile)
+            .then(token => {
+                var o = this.getDecodeObject(token);
+                var c = o.roles.split(',').find(r => r.indexOf('class') >= 0);
+                return c;
+            });
+    }
+
+    static getToken() {
         var local = new Storage(LocalStorage);
         return local.get('id_token');
     }

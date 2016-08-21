@@ -67,7 +67,7 @@ class MyApp {
 
 			console.log(location);
 
-			// http://localhost:8100/#/wxlogin?wxname=test&r=682370
+			// http://localhost:8100/#/wxlogin?wxname=test&r=8483736
 			console.log(Util.getParameterByName("wxname"));
 			console.log(Util.getParameterByName("r"));
 

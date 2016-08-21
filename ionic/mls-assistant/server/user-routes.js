@@ -130,12 +130,12 @@ app.get('/user', function(req, res) {
     User.findOne(userScheme.userSearch, function(err, user) {
         if (err) return console.error(err);
         res.status(201).send({
-            user
+            user: user
         });
     });
 });
 
-//curl -H "Content-Type: application/json" -X POST -d '{"wxUsername":"test"}' http://localhost:3001/wx/createRandom
+//curl -H "Content-Type: application/json" -X POST -d '{"wxname":"test"}' http://localhost:3001/wx/createRandom
 
 app.post('/wx/createRandom', function(req, res) {
 
@@ -170,6 +170,39 @@ app.post('/wx/createRandom', function(req, res) {
 
         res.status(201).send({
             random: wxRandom
+        });
+    });
+});
+
+//curl -H "Content-Type: application/json" -X POST -d '{"username":"test","roles":"student,class2"}' http://localhost:3001/api/protected/user/saveSetting
+
+app.post('/api/protected/user/saveSetting', function(req, res) {
+
+    console.log(req.body);
+    var userScheme = getUserScheme(req);
+    if (!userScheme.username) {
+        return res.status(400).send("You must send the username");
+    }
+
+    User.findOne(userScheme.userSearch, function(err, user) {
+        if (err)
+            return console.error(err);
+
+        console.dir(user);
+
+        if (user) {
+            user.roles = req.body.roles;
+        }
+
+        user.save(function(err, user) {
+            if (err) return console.error(err);
+        });
+
+        res.status(201).send({
+            id_token: createToken({
+                username: user.username,
+                roles: user.roles
+            })
         });
     });
 });

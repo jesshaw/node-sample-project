@@ -17,7 +17,10 @@ app.get('/api/protected/random-quote', function(req, res) {
 });
 
 app.get('/api/protected/homeworks', function(req, res) {
-    Homework.find(function(err, docs) {
+
+    console.log(req.query);
+
+    Homework.find({theClass:req.query.theClass},function(err, docs) {
         if (err)
             return next(err);
         // console.dir(docs);
@@ -77,5 +80,7 @@ app.get('/api/homeworks/init', function(req, res) {
             	return console.error(err);
             res.status(200).send(homework);
         });
-    };
+    }
 });
+
+
