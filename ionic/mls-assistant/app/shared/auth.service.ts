@@ -13,9 +13,9 @@ import {Util} from './util';
 @Injectable()
 export class AuthService {
 
-	LOGIN_URL: string = "http://localhost:3001/sessions/create";
-	SIGNUP_URL: string = "http://localhost:3001/users";
-	USERSETTING_URL: string = "http://localhost:3001/api/protected/user/saveSetting";
+	LOGIN_URL: string = Util.baseUrl + "/sessions/create";
+	SIGNUP_URL: string = Util.baseUrl + "/users";
+	USERSETTING_URL: string = Util.baseUrl + "/api/protected/user/saveSetting";
 
 	contentHeader: Headers = new Headers({ "Content-Type": "application/json" });
 
@@ -33,7 +33,7 @@ export class AuthService {
 		return tokenNotExpired();
 	}
 
-	public saveSettings(settings){
+	public saveSettings(settings) {
 		return Util.getAuthContentHeaders()
 			.then(contentHeaders => this.http.post(this.USERSETTING_URL, JSON.stringify(settings), { headers: contentHeaders }).toPromise())
 			.then(response => {

@@ -42,6 +42,11 @@ var server = require('http').createServer(function(req, res) {
                 target: 'http://localhost:3001'
             });
             break;
+        case 'api.sanfor.com.cn':
+            proxy.web(req, res, {
+                target: 'http://localhost:4001'
+            });
+            break;
         case 'demo.sanfor.com.cn':
             proxy.web(req, res, {
                 target: 'http://localhost:4002'

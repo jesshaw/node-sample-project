@@ -8,7 +8,8 @@ import {Util} from './util';
 
 @Injectable()
 export class HomeworkService {
-	homeworksUrl: string = "http://localhost:3001/api/protected/homeworks";
+
+	homeworksUrl: string = Util.baseUrl + "/api/protected/homeworks";
 	constructor(private http: Http) { }
 
 	getAllHomeworks() {
@@ -17,7 +18,7 @@ export class HomeworkService {
 			.then(c => {
 				let params: URLSearchParams = new URLSearchParams();
 				params.set('theClass', c);
-				debugger;
+				
 				return Util.getAuthContentHeaders()
 					.then(contentHeaders => this.http.get(this.homeworksUrl, {
 						headers: contentHeaders,

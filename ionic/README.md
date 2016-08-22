@@ -13,3 +13,9 @@ cpm install
 ```bash
 ionic g page homework
 ```
+
+#发布
+```bash
+gulp build --release
+
+```
