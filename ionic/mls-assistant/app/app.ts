@@ -12,13 +12,10 @@ import { HomeworkService } from './shared/homework.service';
 import {Util} from './shared/util';
 
 import {ProfilePage} from './pages/profile/profile';
-import {WeixinLoginPage} from './pages/weixin-login/weixin-login';
 import {LoginPage} from './pages/login/login';
 import {HomeworksPage} from './pages/homeworks/homeworks';
 import {ExercisesPage} from './pages/exercises/exercises';
 import {ReviewingExercisesPage} from './pages/reviewing-exercises/reviewing-exercises';
-import { Page1 } from './pages/page1/page1';
-import { Page2 } from './pages/page2/page2';
 
 
 @Component({
@@ -52,8 +49,6 @@ class MyApp {
 			{ title: '课后作业', component: HomeworksPage },
 			{ title: '练习', component: ExercisesPage },
 			{ title: '复习', component: ReviewingExercisesPage }
-			//,{ title: 'Page uno', component: Page1 }
-			//, { title: 'Page dos', component: Page2 }
 		];
 
 	}
@@ -64,12 +59,7 @@ class MyApp {
 			// Here you can do any higher level native things you might need.
 			StatusBar.styleDefault();
 
-
-			console.log(location);
-
 			// http://localhost:8100/#/wxlogin?wxname=test&r=8483736
-			console.log(Util.getParameterByName("wxname"));
-			console.log(Util.getParameterByName("r"));
 
 			if (!this.auth.authenticated()) {
 				var i = location.hash.indexOf("?");

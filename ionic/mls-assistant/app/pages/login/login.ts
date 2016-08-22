@@ -3,6 +3,7 @@ import { NavController,Nav, Storage, LocalStorage } from 'ionic-angular';
 import {Http, Headers} from '@angular/http';
 import {CORE_DIRECTIVES, FORM_DIRECTIVES} from '@angular/common';
 import {JwtHelper} from 'angular2-jwt';
+
 import {AuthService} from '../../shared/auth.service';
 import 'rxjs/add/operator/map';
 
