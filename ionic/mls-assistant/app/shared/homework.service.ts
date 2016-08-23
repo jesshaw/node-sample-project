@@ -25,7 +25,7 @@ export class HomeworkService {
 						search: params
 					}).toPromise())
 					.then(response => {
-						console.log(response.json());
+						// console.log(response.json());
 						return response.json() as Homework[];
 					})
 			});

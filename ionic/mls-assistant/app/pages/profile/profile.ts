@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, Storage, LocalStorage } from 'ionic-angular';
+import { NavController, Storage, LocalStorage,Page } from 'ionic-angular';
 import {Http, Headers} from '@angular/http';
 import {CORE_DIRECTIVES, FORM_DIRECTIVES} from '@angular/common';
 import {JwtHelper} from 'angular2-jwt';
@@ -20,7 +20,7 @@ import {LoginPage} from '../login/login';
   See http://ionicframework.com/docs/v2/components/#navigation for more info on
   Ionic pages and navigation.
 */
-@Component({
+@Page({
 	templateUrl: 'build/pages/profile/profile.html',
 	directives: [CORE_DIRECTIVES, FORM_DIRECTIVES]
 })

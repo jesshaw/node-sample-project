@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { NavController, Page } from 'ionic-angular';
 
 import { Homework } from '../../shared/homework';
 import { HomeworkService } from '../../shared/homework.service';
 import { HomeworkPage } from '../homework/homework';
+
+import 'rxjs/add/operator/toPromise';
 
 /*
   Generated class for the HomeworksPage page.
@@ -14,34 +16,35 @@ import { HomeworkPage } from '../homework/homework';
 @Component({
 	templateUrl: 'build/pages/homeworks/homeworks.html',
 })
-export class HomeworksPage {	
+export class HomeworksPage implements OnInit, OnDestroy {
 	error: any;
-	homeworks: Homework[];
-	icons: string[];
-	items: Array<{ id:number,title: string, note:Date, icon: string }>;
+	icons: string[] = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
+		'american-football', 'boat', 'bluetooth', 'build'];
+	items: Array<{ id: number, title: string, note: Date, icon: string }>;
 
-	constructor(public nav: NavController, private homeworkService: HomeworkService) {
+	constructor(public nav: NavController, private homeworkSvc: HomeworkService) {
 
-		// Let's populate this page with some filler content for funzies
-		this.icons = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
-			'american-football', 'boat', 'bluetooth', 'build'];
+	}
 
-		this.items = [];
-		//debugger;
-		this.homeworkService.getAllHomeworks()		
+	ngOnInit() {
+		this.homeworkSvc.getAllHomeworks()
             .then(homeworks => {
+            	this.items=[];
 				for (var i = 0; i < homeworks.length; ++i) {
-					var currentHomework = homeworks[i];
-					var title = this.homeworkService.getTitle(currentHomework.catgory);
+					var title = this.homeworkSvc.getTitle(homeworks[i].catgory);
 					this.items.push({
-						id:currentHomework.id,
+						id: homeworks[i].id,
 						title: title,
-						note:new Date(currentHomework.date),
+						note: new Date(homeworks[i].date),
 						icon: this.icons[Math.floor(Math.random() * this.icons.length)]
 					});
 				}
+				console.log(this.items);
             })
 			.catch(error => this.error = error);
+	}
+
+	ngOnDestroy() {		
 	}
 
 	itemTapped(event, item) {

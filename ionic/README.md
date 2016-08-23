@@ -19,3 +19,10 @@ ionic g page homework
 gulp build --release
 
 ```
+
+
+#指定端口
+```bash
+ionic serve -p 3000
+
+```
