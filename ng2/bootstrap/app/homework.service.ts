@@ -9,7 +9,7 @@ import {Util} from './util';
 @Injectable()
 export class HomeworkService {
 
-	homeworksUrl: string = Util.baseUrl + "/api/protected/homeworks";
+	homeworksUrl: string = Util.baseUrl + "/api/homeworks";
 	constructor(private http: Http) { }
 
 	getAllHomeworks() {

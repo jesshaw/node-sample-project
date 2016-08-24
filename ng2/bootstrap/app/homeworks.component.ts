@@ -21,8 +21,11 @@ export class HomeworksComponent implements OnInit {
 
    getHomeworks(): void {
       this.homeworkSvc
-         .getHomeworks()
-         .then(homeworks => this.homeworks = homeworks)
+         .getAllHomeworks()
+         .then(homeworks => {
+            this.homeworks = homeworks;
+            console.log(this.homeworks);
+         })
          .catch(error => this.error = error);
    }
 

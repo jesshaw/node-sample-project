@@ -1,13 +1,3 @@
-<ul class="heroes">
-  <li *ngFor="let hero of heroes" (click)="onSelect(hero)" [class.selected]="hero === selectedHero">
-    <span class="hero-element">
-      <span class="badge">{{hero.id}}</span> {{hero.name}}
-    </span>
-    <button class="delete-button" (click)="deleteHero(hero, $event)">Delete</button>
-  </li>
-</ul>
-
-
-<div class="list-group">
-  <button type="button" class="list-group-item" *ngFor="let homework of homeworks">homework.content</button> 
+<div class="list-group" *ngFor="let homework of homeworks">
+    <button type="button" class="list-group-item">{{homework.catgory}} <span class="badge">{{homework.date| date:'yyyy-MM-dd'}}</span></button>
 </div>

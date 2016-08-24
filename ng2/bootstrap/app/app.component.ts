@@ -1,6 +1,9 @@
 import { Component }          from '@angular/core';
+import {ROUTER_DIRECTIVES} from '@angular/router';
 
-import './rxjs-extensions';
+// import './rxjs-extensions';
+
+import { HomeworkService }         from './homework.service';
 
 @Component({
   selector: 'my-app',
@@ -12,6 +15,10 @@ import './rxjs-extensions';
     </nav>
     <router-outlet></router-outlet>
   `,
+  directives: [ROUTER_DIRECTIVES],
+  providers: [
+    HomeworkService
+  ]
 })
 export class AppComponent {
   title = 'Tour of Homeworks';

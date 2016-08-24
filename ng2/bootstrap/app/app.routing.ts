@@ -1,8 +1,8 @@
-import { Route, RouterModule } from '@angular/router';
+import { provideRouter, RouterConfig } from '@angular/router';
 import { HomeworksComponent }     from './homeworks.component';
 import { HomeworkDetailComponent } from './homework-detail.component';
 
-const appRoutes: Route = [
+const appRoutes: RouterConfig = [
   {
     path: '',
     redirectTo: '/homeworks',
@@ -18,5 +18,6 @@ const appRoutes: Route = [
   }
 ];
 
-export const routing = RouterModule.forRoot(appRoutes);
-
+export const APP_ROUTER_PROVIDERS =  [
+  provideRouter(appRoutes)
+];
