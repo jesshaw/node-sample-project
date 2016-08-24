@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router }            from '@angular/router';
+import { Router,ROUTER_DIRECTIVES }            from '@angular/router';
 
 import { Homework }                from './homework';
 import { HomeworkService }         from './homework.service';
@@ -10,6 +10,8 @@ import { HomeworkService }         from './homework.service';
    selector: 'my-heroes',
    templateUrl: 'app/homeworks.component.html',
    // styleUrls:  ['app/heroes.component.css']
+   
+  directives: [ROUTER_DIRECTIVES],
 })
 export class HomeworksComponent implements OnInit {
    homeworks: Homework[];

@@ -1,7 +1,8 @@
 export class Homework  {
-	_id:string;
-	id:number;
+	id:string;
 	catgory:string;
+	catgoryDesc:string;
 	date:string;
 	content:string;
+	icon:string;
 }

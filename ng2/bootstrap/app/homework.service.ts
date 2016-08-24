@@ -17,13 +17,31 @@ export class HomeworkService {
 		let params: URLSearchParams = new URLSearchParams();
 		params.set('theClass', 'class1');
 
+		var icons: string[] = ['glyphicon-music', 'glyphicon-heart', 'glyphicon-star', 'glyphicon-road', 'glyphicon-headphones', 'glyphicon-flag',
+			'glyphicon-camera', ' glyphicon-cloud'];
+
 		return this.http.get(this.homeworksUrl, {
 			headers: Util.getContentHeaders(),
 			search: params
 		}).toPromise()
 			.then(response => {
+				var hs = response.json();
+				var homeworks: Homework[] = [];
+				for (var i = 0; i < hs.length; ++i) {
+					var catgoryDesc = this.getTitle(hs[i].catgory);
+					homeworks.push({
+						id: hs[i]._id,
+						catgoryDesc: catgoryDesc,
+						catgory: hs[i].catgory,
+						date: hs[i].date,
+						content: hs[i].content,
+						icon: icons[Math.floor(Math.random() * icons.length)]
+					});
+				}
+				console.log(homeworks);
+
 				// console.log(response.json());
-				return response.json() as Homework[];
+				return homeworks;
 			});
 
 
@@ -61,7 +79,7 @@ export class HomeworkService {
 		return this.getHomeworksByCategory("3");
 	}
 
-	getHomework(id: number) {
+	getHomework(id: string) {
 
 		// return this.homeworks.find(homework => homework.id === id);
 		return this.getAllHomeworks()
