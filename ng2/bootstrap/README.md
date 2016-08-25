@@ -28,3 +28,6 @@ Clone this repo
   ```
 
 Good luck with angular2 hacking!
+
+[deploy1](http://stackoverflow.com/questions/34614743/how-to-prepare-release-version-with-systemjs-and-gulp)
+[deploy2](http://stackoverflow.com/questions/36285064/how-do-i-actually-deploy-an-angular-2-typescript-systemjs-app)

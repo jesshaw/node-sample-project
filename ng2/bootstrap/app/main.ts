@@ -7,6 +7,6 @@ import {provideForms, disableDeprecatedForms} from '@angular/forms';
 import {APP_ROUTER_PROVIDERS} from './app.routing';
 import {HTTP_PROVIDERS} from '@angular/http';
 
-//enableProdMode();
+enableProdMode();
 
 bootstrap(AppComponent, [APP_ROUTER_PROVIDERS,HTTP_PROVIDERS,disableDeprecatedForms(), provideForms()]);
