@@ -1,4 +1,11 @@
-<p>
+<div class="list-group">
+    <a class="list-group-item" *ngFor="let homework of homeworks" routerLink="/detail/{{homework.id}}">
+        <span class="glyphicon {{homework.icon}}" aria-hidden="true"> </span>
+        <span class="text-center" style="margin-left:10px;"> {{homework.catgoryDesc}} </span>
+        <span class="badge">{{homework.date| date:'yyyy-MM-dd'}}</span>
+    </a>
+</div>
+<!-- <p>
   Howdy! Here's a list of awesome computer scientists. Do you know any others? Add to the list yourself.
 </p>
 
@@ -9,4 +16,4 @@
 
 <ul>
   <li *ngFor="let name of names">{{name}}</li>
-</ul>
+</ul> -->

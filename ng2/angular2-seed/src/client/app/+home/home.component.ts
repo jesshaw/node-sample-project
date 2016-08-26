@@ -1,5 +1,7 @@
+// ------------------------------------------
+
 import { Component, OnInit } from '@angular/core';
-import { NameListService } from '../shared/index';
+import { NameListService,Homework } from '../shared/index';
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -16,6 +18,7 @@ export class HomeComponent implements OnInit {
   newName: string = '';
   errorMessage: string;
   names: any[] = [];
+  homeworks:Homework[]=[];
 
   /**
    * Creates an instance of the HomeComponent with the injected
@@ -38,7 +41,7 @@ export class HomeComponent implements OnInit {
   getNames() {
     this.nameListService.get()
                      .subscribe(
-                       names => this.names = names,
+                       names => this.homeworks = names,
                        error =>  this.errorMessage = <any>error
                        );
   }

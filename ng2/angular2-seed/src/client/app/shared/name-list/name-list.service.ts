@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import {Homework} from '../homework/homework';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
@@ -15,22 +16,48 @@ export class NameListService {
    * @param {Http} http - The injected Http.
    * @constructor
    */
-  constructor(private http: Http) {}
+  constructor(private http: Http) { }
 
-  /**
-   * Returns an Observable for the HTTP GET request for the JSON resource.
-   * @return {string[]} The Observable for the HTTP request.
-   */
-  get(): Observable<string[]> {
-    return this.http.get('/assets/data.json')
-                    .map((res: Response) => res.json())
-                    .catch(this.handleError);
+  // /**
+  //  * Returns an Observable for the HTTP GET request for the JSON resource.
+  //  * @return {string[]} The Observable for the HTTP request.
+  //  */
+  // get(): Observable<string[]> {
+  //   return this.http.get('/assets/data.json')
+  //                   .map((res: Response) => res.json())
+  //                   .catch(this.handleError);
+  // }
+
+  get(): Observable<Homework[]> {
+    var icons: string[] = ['glyphicon-music', 'glyphicon-heart', 'glyphicon-star', 'glyphicon-road', 'glyphicon-headphones'];
+
+    return this.http.get('http://api.sanfor.com.cn/api/homeworks?theClass=class1')
+      .map((res: Response) => {
+        var hs = res.json();
+        var homeworks: Homework[] = [];
+        for (var i = 0; i < hs.length; ++i) {
+          var catgoryDesc = '练习';
+          homeworks.push({
+            id: hs[i]._id,
+            catgoryDesc: catgoryDesc,
+            catgory: hs[i].catgory,
+            date: hs[i].date,
+            content: hs[i].content,
+            icon: icons[Math.floor(Math.random() * icons.length)]
+          });
+        }
+        console.log(homeworks);
+
+        // console.log(response.json());
+        return homeworks;
+      })
+      .catch(this.handleError);
   }
 
   /**
     * Handle HTTP error
     */
-  private handleError (error: any) {
+  private handleError(error: any) {
     // In a real world app, we might use a remote logging infrastructure
     // We'd also dig deeper into the error to get a better message
     let errMsg = (error.message) ? error.message :
