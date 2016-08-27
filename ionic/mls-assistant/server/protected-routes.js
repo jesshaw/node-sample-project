@@ -16,7 +16,7 @@ app.get('/api/protected/random-quote', function(req, res) {
     res.status(200).send(quoter.getRandomOne());
 });
 
-app.get('/api/homeworks', function(req, res) {
+app.get('/api/protected/homeworks', function(req, res) {
 
     console.log(req.query);
 

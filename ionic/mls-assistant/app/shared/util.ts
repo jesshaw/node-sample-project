@@ -60,6 +60,11 @@ export class Util {
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
 
+    static getString(date:Date){
+        
+        return date.getFullYear()+'年'+date.getMonth()+'月'+date.getDay()+'日';
+    }
+
     //     // var url = "http://www.x.com?luckyNums=[31,21,6]&name=John&favFoods=[pizza]&noVal"
     //     // console.log(url2json(url));
     //     static url2json(url:string) {

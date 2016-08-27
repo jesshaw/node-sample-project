@@ -13,6 +13,6 @@
     </ion-navbar>
 </ion-header>
 <ion-content padding *ngIf="homework">
-    {{homework.date | date:'yyyy-MM-dd'}}   <button [navPush]="exercisesPage">to Exercises</button> 
+    {{homework.date}}   <button [navPush]="exercisesPage">to Exercises</button> 
     <p [innerHTML]="homework.content"></p>
 </ion-content>

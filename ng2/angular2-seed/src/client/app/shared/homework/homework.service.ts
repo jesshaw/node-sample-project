@@ -33,7 +33,7 @@ export class HomeworkService {
 						id: hs[i]._id,
 						catgoryDesc: catgoryDesc,
 						catgory: hs[i].catgory,
-						date: hs[i].date,
+						date: (new Date(hs[i].date)).toLocaleDateString(),
 						content: hs[i].content,
 						icon: icons[Math.floor(Math.random() * icons.length)]
 					});

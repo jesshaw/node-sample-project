@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
+import {Util} from '../../shared/util';
 import { Homework } from '../../shared/homework';
 import { HomeworkService } from '../../shared/homework.service';
 import { HomeworkPage } from '../homework/homework';
@@ -19,7 +20,7 @@ export class ReviewingExercisesPage {
   error: any;
 	homeworks: Homework[];
 	icons: string[];
-	items: Array<{ id:number,title: string, note: Date, icon: string }>;
+	items: Array<{ id:number,title: string, note: string, icon: string }>;
 
 	constructor(public nav: NavController, private homeworkService: HomeworkService) {
 
@@ -37,7 +38,7 @@ export class ReviewingExercisesPage {
 					this.items.push({
 						id:currentHomework.id,
 						title: title,
-						note: new Date( currentHomework.date),
+						note:  Util.getString(new Date(homeworks[i].date)),
 						icon: this.icons[Math.floor(Math.random() * this.icons.length)]
 					});
 				}

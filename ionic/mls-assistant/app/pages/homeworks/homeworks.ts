@@ -5,6 +5,9 @@ import { Homework } from '../../shared/homework';
 import { HomeworkService } from '../../shared/homework.service';
 import { HomeworkPage } from '../homework/homework';
 
+import {Util} from '../../shared/util';
+
+
 import 'rxjs/add/operator/toPromise';
 
 /*
@@ -20,7 +23,7 @@ export class HomeworksPage implements OnInit, OnDestroy {
 	error: any;
 	icons: string[] = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
 		'american-football', 'boat', 'bluetooth', 'build'];
-	items: Array<{ id: number, title: string, note: Date, icon: string }>;
+	items: Array<{ id: number, title: string, note: string, icon: string }>;
 
 	constructor(public nav: NavController, private homeworkSvc: HomeworkService) {
 
@@ -29,13 +32,13 @@ export class HomeworksPage implements OnInit, OnDestroy {
 	ngOnInit() {
 		this.homeworkSvc.getAllHomeworks()
             .then(homeworks => {
-            	this.items=[];
+				this.items = [];
 				for (var i = 0; i < homeworks.length; ++i) {
 					var title = this.homeworkSvc.getTitle(homeworks[i].catgory);
 					this.items.push({
 						id: homeworks[i].id,
 						title: title,
-						note: new Date(homeworks[i].date),
+						note: Util.getString(new Date(homeworks[i].date)),
 						icon: this.icons[Math.floor(Math.random() * this.icons.length)]
 					});
 				}
@@ -44,7 +47,7 @@ export class HomeworksPage implements OnInit, OnDestroy {
 			.catch(error => this.error = error);
 	}
 
-	ngOnDestroy() {		
+	ngOnDestroy() {
 	}
 
 	itemTapped(event, item) {
