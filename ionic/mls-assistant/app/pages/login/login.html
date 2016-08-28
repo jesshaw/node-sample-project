@@ -26,11 +26,11 @@
     <div [ngSwitch]="authType">
         <form *ngSwitchCase="'login'" #loginCreds="ngForm" (ngSubmit)="login(loginCreds.value)">
             <ion-item>
-                <ion-label floating>用户名</ion-label>
+                <ion-label>用户名</ion-label>
                 <ion-input type="text" ngControl="username"></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label floating>密码</ion-label>
+                <ion-label>密码</ion-label>
                 <ion-input type="password" ngControl="password"></ion-input>
             </ion-item>
             <div padding>
@@ -39,11 +39,11 @@
         </form>
         <form *ngSwitchCase="'signup'" #signupCreds="ngForm" (ngSubmit)="signup(signupCreds.value)">
             <ion-item>
-                <ion-label floating>用户名</ion-label>
+                <ion-label>用户名</ion-label>
                 <ion-input type="text" ngControl="username"></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label floating>密码</ion-label>
+                <ion-label>密码</ion-label>
                 <ion-input type="password" ngControl="password"></ion-input>
             </ion-item>
             <div padding>
@@ -53,13 +53,5 @@
     </div>
     <div padding>
         <p *ngIf="error" class="error">{{ error._body }}</p>
-    </div>
-</ion-content>
-<ion-content *ngIf="auth.authenticated()">
-    <div>
-        <div padding>
-            <h1>欢迎, {{ user }}!角色， {{ roles }}</h1>
-            <button block (click)="logout()">退出</button>
-        </div>
     </div>
 </ion-content>

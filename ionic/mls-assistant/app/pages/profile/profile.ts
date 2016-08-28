@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NavController, Storage, LocalStorage,Page } from 'ionic-angular';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { NavController, Alert, Storage, LocalStorage, Page } from 'ionic-angular';
 import {Http, Headers} from '@angular/http';
 import {CORE_DIRECTIVES, FORM_DIRECTIVES} from '@angular/common';
 import {JwtHelper} from 'angular2-jwt';
@@ -9,6 +9,7 @@ import 'rxjs/add/operator/map';
 // const map = require('rxjs/add/operator/map');
 // 
 import {Util} from '../../shared/util';
+import {User, Classes} from '../../shared/User';
 
 import {LoginPage} from '../login/login';
 
@@ -24,9 +25,10 @@ import {LoginPage} from '../login/login';
 	templateUrl: 'build/pages/profile/profile.html',
 	directives: [CORE_DIRECTIVES, FORM_DIRECTIVES]
 })
-export class ProfilePage {
+export class ProfilePage implements OnInit, OnDestroy {
 
-	user: string;
+	user: User = new User();
+	userName: string;
 	roles: string[];
 	theClassName: string;
 	theClassValue: string = '';
@@ -38,7 +40,7 @@ export class ProfilePage {
 		Util.getToken()
 			.then(t => {
 				this.roles = Util.getDecodeObject(t).roles.split(',');
-				this.user = Util.getDecodeObject(t).username;
+				this.userName = Util.getDecodeObject(t).username;
 				this.theClassValue = this.roles.find(r => r.indexOf('class') >= 0);
 				console.log(this.theClassValue);
 			})
@@ -49,21 +51,63 @@ export class ProfilePage {
 		this.classes.push({ name: '三班', value: 'class3' });
 	}
 
-	saveSettings() {
+	ngOnInit() {
+		Util.getToken()
+			.then(t => Util.getDecodeObject(t).username)
+			.then(username => {
+				this.auth.getUser(username)
+					.then(user => {
+						this.user = user;
+						console.log(this.user);
 
-		console.log(this.theClassValue);
+					})
+					.catch(error => this.error = error)
+			});
 
-		var newRoles = this.roles.filter(r => r.indexOf('class') < 0);
-		newRoles.push(this.theClassValue);
+	}
 
-		var saveRoles = newRoles.join(',');
+	ngOnDestroy() {
+	}
 
-		console.log(saveRoles);
-
-		this.auth.saveSettings({ username: this.user, roles: saveRoles })
+	save() {
+		this.auth.saveSettings(this.user)
 			.then(data => this.authSuccess(data.id_token)
 			)
 			.catch(error => this.error = error);;
+	}
+
+	// testRadioOpen: boolean;
+	// testRadioResult: any;
+	selectClass() {
+		let alert = Alert.create();
+		alert.setTitle('选在您所在的班级!');
+		var classes = Classes.getClasses();
+
+		for (var i = 0; i < classes.length; ++i) {
+			alert.addInput({
+				type: 'radio',
+				label: classes[i].name,
+				value: classes[i].value,
+				checked: this.user.theClass == classes[i].value
+			});
+		}
+
+		alert.addButton('取消');
+		alert.addButton({
+			text: '确认',
+			handler: (data: any) => {
+				console.log('Radio data:', data);
+				// this.testRadioOpen = false;
+				// this.testRadioResult = data;
+				this.user.theClass = data;
+				this.user.theClassDesc = classes.find(c => c.value == data).name;
+				var newRoles = this.user.roles.split(',').filter(r => r.indexOf('class') < 0);
+				newRoles.push(data);				
+				this.user.roles = newRoles.join(',');
+				this.save();
+			}
+		});
+		this.nav.present(alert);
 	}
 
 	openLoginPage() {
@@ -73,7 +117,12 @@ export class ProfilePage {
 	authSuccess(token) {
 		this.error = null;
 		this.local.set('id_token', token);
-
 		this.theClassName = this.classes.find(c => c.value == this.theClassValue).name;
+	}
+
+	logout() {
+		this.local.remove('id_token');
+		this.user = null;
+		this.nav.setRoot(LoginPage);
 	}
 }

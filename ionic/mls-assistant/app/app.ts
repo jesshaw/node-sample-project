@@ -16,6 +16,7 @@ import {LoginPage} from './pages/login/login';
 import {HomeworksPage} from './pages/homeworks/homeworks';
 import {ExercisesPage} from './pages/exercises/exercises';
 import {ReviewingExercisesPage} from './pages/reviewing-exercises/reviewing-exercises';
+import {Page2} from './pages/page2/page2';
 
 
 @Component({
@@ -69,7 +70,7 @@ class MyApp {
 						r: Util.getParameterByName("r")
 					}).subscribe(
 						data => this.authSuccess(data.id_token),
-						err => { this.error = err; this.nav.setRoot(ProfilePage); }
+						err => { this.error = err; }
 						);
 				}
 				else {

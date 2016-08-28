@@ -119,20 +119,32 @@ app.post('/sessions/create', function(req, res) {
     });
 });
 
-// curl -H "Content-Type: application/json" -X GET -d '{"wxUsername":"test"}' http://localhost:3001/user
-app.get('/user', function(req, res) {
+// curl http://localhost:4001/api/protected/user?username=test
+app.get('/api/protected/user', function(req, res) {
 
-    var userScheme = getUserScheme(req);
-    if (!userScheme.username) {
-        return res.status(400).send("You must send the username and the password");
+    // console.log(req.query);
+    if (!req.query.username) {
+        return res.status(400).send("You must send the username");
     }
-
-    User.findOne(userScheme.userSearch, function(err, user) {
-        if (err) return console.error(err);
+    User.findOne({ username: req.query.username }, function(err, user) {
+        if (err)
+            return console.error(err);
         res.status(201).send({
             user: user
         });
     });
+
+    // var userScheme = getUserScheme(req);
+    // if (!userScheme.username) {
+    //     return res.status(400).send("You must send the username and the password");
+    // }
+
+    // User.findOne(userScheme.userSearch, function(err, user) {
+    //     if (err) return console.error(err);
+    //     res.status(201).send({
+    //         user: user
+    //     });
+    // });
 });
 
 //curl -H "Content-Type: application/json" -X POST -d '{"wxname":"test"}' http://localhost:3001/wx/createRandom
@@ -178,7 +190,7 @@ app.post('/wx/createRandom', function(req, res) {
 
 app.post('/api/protected/user/saveSetting', function(req, res) {
 
-    console.log(req.body);
+    // console.log(req.body);
     var userScheme = getUserScheme(req);
     if (!userScheme.username) {
         return res.status(400).send("You must send the username");
@@ -188,14 +200,15 @@ app.post('/api/protected/user/saveSetting', function(req, res) {
         if (err)
             return console.error(err);
 
-        console.dir(user);
+        // console.dir(user);
 
         if (user) {
             user.roles = req.body.roles;
         }
 
         user.save(function(err, user) {
-            if (err) return console.error(err);
+            if (err)
+                return console.error(err);
         });
 
         res.status(201).send({

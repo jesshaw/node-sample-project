@@ -1,10 +1,13 @@
 import {Injectable} from '@angular/core';
-import {Http, Headers} from '@angular/http';
+import {Http, Headers, URLSearchParams} from '@angular/http';
 import { NavController, Storage, LocalStorage } from 'ionic-angular';
 import {JwtHelper, tokenNotExpired} from 'angular2-jwt';
 
 
 import {Util} from './util';
+import {User, Classes} from './User';
+
+import './rxjs-extensions';
 
 
 // https://github.com/auth0-blog/angular2-authentication-sample
@@ -16,6 +19,7 @@ export class AuthService {
 	LOGIN_URL: string = Util.baseUrl + "/sessions/create";
 	SIGNUP_URL: string = Util.baseUrl + "/users";
 	USERSETTING_URL: string = Util.baseUrl + "/api/protected/user/saveSetting";
+	GETUSER_URL: string = Util.baseUrl + "/api/protected/user";
 
 	contentHeader: Headers = new Headers({ "Content-Type": "application/json" });
 
@@ -40,6 +44,31 @@ export class AuthService {
 				console.log(response.json());
 				return response.json();
 			});
+	}
+
+	public getUser(username) {
+		let params: URLSearchParams = new URLSearchParams();
+		params.set('username', username);
+
+		return Util.getAuthContentHeaders()
+			.then(contentHeaders => this.http.get(this.GETUSER_URL, {
+				headers: contentHeaders,
+				search: params
+			}).toPromise())
+			.then(response => {
+				var json = response.json().user;
+				var u = new User();
+				u.username = json.username;
+				u.password = json.password == '666666' ? ' 初始密码666666修改后显示*' : '******';
+				u.roles = json.roles;
+				u.rolesArray = json.roles.split(',');
+				u.wxUsername = json.wxUsername;
+				u.isBindWx = json.wxUsername ? true : false;
+				var theClass = u.rolesArray.find(r => r.indexOf('class') >= 0);
+				u.theClass = theClass
+				u.theClassDesc = theClass ? Classes.getClasses().find(c => c.value == u.theClass).name : '选班后可查看作业';
+				return u;
+			})
 	}
 
 

@@ -13,32 +13,96 @@
     </ion-navbar>
 </ion-header>
 <ion-content *ngIf="auth.authenticated()">
-    <div>
-        <div padding>
-            <h1>欢迎, {{ user }}!</h1>
-            <ion-list radio-group [(ngModel)]="theClassValue" (ngModelChange)="saveSettings();">
-                <ion-list-header>
-                    请选择班级
-                </ion-list-header>
-                <ion-item *ngFor="let item of classes">
-                    <ion-label>{{item.name}}</ion-label>
-                    <ion-radio checked="true" value="{{item.value}}"></ion-radio>
-                </ion-item>
-               <!--  <ion-item>
-                    <ion-label>一班</ion-label>
-                    <ion-radio checked="true" value="class1"></ion-radio>
-                </ion-item>
-                <ion-item>
-                    <ion-label>二班</ion-label>
-                    <ion-radio value="class2"></ion-radio>
-                </ion-item>
-                <ion-item>
-                    <ion-label>三班</ion-label>
-                    <ion-radio value="class3" disabled="true"></ion-radio>
-                </ion-item> -->
-            </ion-list>
-            您选择了{{theClassName}}!
-            <button block (click)="openLoginPage()">用户管理</button>
-        </div>
-    </div>
+    <ion-list no-border>
+        <ion-list-header>
+            用户信息
+        </ion-list-header>
+        <ion-item  (click)="selectClass()">
+            <ion-icon name='people' item-left></ion-icon>
+            所在班级
+            <ion-note item-right>
+                {{user.theClassDesc}}
+            </ion-note>
+        </ion-item>
+        <ion-item>
+            <ion-icon name='contact' item-left></ion-icon>
+            角色
+            <ion-note item-right>
+                {{user.roles}}
+            </ion-note>
+        </ion-item>
+    </ion-list>
+    <ion-list no-border>
+        <ion-list-header>
+            登陆信息
+        </ion-list-header>
+        <ion-item>
+            <ion-icon name='person' item-left></ion-icon>
+            用户名
+            <ion-note item-right>
+                {{user.username}}
+            </ion-note>
+        </ion-item>
+        <ion-item>
+            <ion-icon name='lock' item-left></ion-icon>
+            密码
+            <ion-note item-right>
+                {{user.password}}
+            </ion-note>
+        </ion-item>
+    </ion-list>
+    <ion-list no-border>
+        <ion-list-header>
+            微信信息
+        </ion-list-header>
+        <ion-item>
+            <ion-icon name='chatbubbles' item-left></ion-icon>
+            微信号
+            <ion-note item-right>
+                {{user.wxUsername}}
+            </ion-note>
+        </ion-item>
+        <ion-item>
+            <ion-toggle [checked]="user.isBindWx"></ion-toggle>
+            <ion-label>
+                已绑定
+            </ion-label>
+            <ion-icon name='link' item-left></ion-icon>
+        </ion-item>
+    </ion-list>
+  <!--   <ion-list no-border>
+        <ion-list-header>
+            Classes
+        </ion-list-header>
+        <ion-item>
+            <ion-icon name='planet' item-left></ion-icon>
+            Astronomy
+            <ion-note item-right>
+                To the moon
+            </ion-note>
+        </ion-item>
+        <ion-item>
+            <ion-toggle checked="false"></ion-toggle>
+            <ion-label>
+                Muggle Studies
+            </ion-label>
+            <ion-icon name='body' item-left></ion-icon>
+        </ion-item>
+        <ion-item>
+            <ion-icon name='leaf' item-left></ion-icon>
+            Herbology
+            <ion-icon name='rose' item-right secondary></ion-icon>
+        </ion-item>
+        <ion-item>
+            <ion-icon name='flask' item-left></ion-icon>
+            Potions
+            <ion-note item-right>
+                Poisonous
+            </ion-note>
+        </ion-item>
+    </ion-list> -->
+    <button block full light (click)="logout()">退出</button>    
+</ion-content>
+<ion-content [ngStyle]="{'top': '100px'}" *ngIf="!auth.authenticated()">
+    <button block full (click)="openLoginPage()">登陆</button>
 </ion-content>

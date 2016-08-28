@@ -13,45 +13,16 @@
     </ion-navbar>
 </ion-header>
 <ion-content padding>
-    <ion-list>
-        <ion-item ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
+    <ion-list no-border>
+        <ion-list-header>
+            所有作业列表
+        </ion-list-header>
+        <ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
             <ion-icon [name]="item.icon" item-left></ion-icon>
-             {{item.note}} {{item.title}}
+            {{item.note}} {{item.title}}
+            <ion-icon [name]="item.showStar" danger></ion-icon>
+            <!--  <ion-note item-right> 新 </ion-note>    -->
+            <ion-icon ios="ios-arrow-forward" md="md-arrow-forward" item-right></ion-icon>
         </ion-item>
     </ion-list>
-
-
-    <ion-list-header>
-      Classes
-    </ion-list-header>
-
-    <ion-item>
-      <ion-icon name='planet' item-left></ion-icon>
-      Astronomy
-      <ion-note item-right>
-      To the moon
-      </ion-note>
-    </ion-item>
-
-    <ion-item>
-      <ion-toggle checked="false"></ion-toggle>
-      <ion-label>
-        Muggle Studies
-      </ion-label>
-      <ion-icon name='body' item-left></ion-icon>
-    </ion-item>
-
-    <ion-item>
-      <ion-icon name='leaf' item-left></ion-icon>
-      Herbology
-      <ion-icon name='rose' item-right secondary></ion-icon>
-    </ion-item>
-
-    <ion-item>
-      <ion-icon name='flask' item-left></ion-icon>
-      Potions
-      <ion-note item-right>
-      Poisonous
-      </ion-note>
-    </ion-item>
 </ion-content>

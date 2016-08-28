@@ -23,7 +23,7 @@ export class HomeworksPage implements OnInit, OnDestroy {
 	error: any;
 	icons: string[] = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
 		'american-football', 'boat', 'bluetooth', 'build'];
-	items: Array<{ id: number, title: string, note: string, icon: string }>;
+	items: Array<{ id: number, title: string, note: string, icon: string,showStar:string }>;
 
 	constructor(public nav: NavController, private homeworkSvc: HomeworkService) {
 
@@ -39,7 +39,8 @@ export class HomeworksPage implements OnInit, OnDestroy {
 						id: homeworks[i].id,
 						title: title,
 						note: Util.getString(new Date(homeworks[i].date)),
-						icon: this.icons[Math.floor(Math.random() * this.icons.length)]
+						icon: this.icons[Math.floor(Math.random() * this.icons.length)],
+						showStar: Util.showStar(new Date(homeworks[i].date))
 					});
 				}
 				console.log(this.items);

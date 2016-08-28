@@ -4,10 +4,13 @@ import {Http, Headers} from '@angular/http';
 import {CORE_DIRECTIVES, FORM_DIRECTIVES} from '@angular/common';
 import {JwtHelper} from 'angular2-jwt';
 
-import {AuthService} from '../../shared/auth.service';
+
 import 'rxjs/add/operator/map';
 
+import {Util} from '../../shared/util';
+import {HomeworksPage} from '../homeworks/homeworks';
 import {ProfilePage} from '../profile/profile';
+import {AuthService} from '../../shared/auth.service';
 
 /*
   Generated class for the LoginPage page.
@@ -17,6 +20,7 @@ import {ProfilePage} from '../profile/profile';
 */
 @Component({
 	templateUrl: 'build/pages/login/login.html',
+	directives: [CORE_DIRECTIVES, FORM_DIRECTIVES]
 })
 export class LoginPage {
 
@@ -36,7 +40,7 @@ export class LoginPage {
 	user: string;
 	roles: string;
 
-	constructor(private http: Http, private auth: AuthService) {
+	constructor(private http: Http, private auth: AuthService, private nav: NavController) {
 
 		let token;
 		this.local.get('id_token').then(profile => {
@@ -57,8 +61,6 @@ export class LoginPage {
 
 	login(credentials) {
 		this.auth.login(credentials)
-			// this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
-			// 	.map(res => res.json())
 			.subscribe(
 			data => this.authSuccess(data.id_token),
 			err => this.error = err
@@ -83,6 +85,14 @@ export class LoginPage {
 		this.error = null;
 		this.local.set('id_token', token);
 		this.user = this.jwtHelper.decodeToken(token).username;
+
+		var roles: string = Util.getDecodeObject(token).roles		
+		if (roles.indexOf('class') > 0) {
+			this.nav.setRoot(HomeworksPage);
+		}
+		else {
+			this.nav.setRoot(ProfilePage);
+		}
 	}
 
 }

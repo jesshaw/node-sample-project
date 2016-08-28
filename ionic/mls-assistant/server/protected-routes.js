@@ -20,7 +20,7 @@ app.get('/api/protected/homeworks', function(req, res) {
 
     console.log(req.query);
 
-    Homework.find({theClass:req.query.theClass},function(err, docs) {
+    Homework.find({theClass:req.query.theClass}, null, {sort: {date: -1}},function(err, docs) {
         if (err)
             return next(err);
         // console.dir(docs);

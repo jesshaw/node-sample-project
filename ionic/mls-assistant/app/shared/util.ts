@@ -6,8 +6,8 @@ import 'rxjs/add/operator/toPromise';
 
 export class Util {
 
-    // static baseUrl="http://localhost:3001";
-    static baseUrl="http://api.sanfor.com.cn";
+    static baseUrl="http://localhost:4001";
+    // static baseUrl="http://api.sanfor.com.cn";
 
     static getAuthContentHeaders() {
         var contentHeader = new Headers({ "Content-Type": "application/json" });
@@ -61,9 +61,13 @@ export class Util {
     }
 
     static getString(date:Date){
-        
-        return date.getFullYear()+'年'+date.getMonth()+'月'+date.getDay()+'日';
+        return date.getFullYear()+'年'+(date.getMonth()+1)+'月'+date.getDate()+'日';
     }
+
+    static showStar(date:Date){        
+        return date.toLocaleDateString()===(new Date()).toLocaleDateString()?'star':'';
+    }
+
 
     //     // var url = "http://www.x.com?luckyNums=[31,21,6]&name=John&favFoods=[pizza]&noVal"
     //     // console.log(url2json(url));
