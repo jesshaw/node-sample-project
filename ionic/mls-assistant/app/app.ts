@@ -49,7 +49,8 @@ class MyApp {
 			{ title: '设置', component: ProfilePage },
 			{ title: '课后作业', component: HomeworksPage },
 			{ title: '练习', component: ExercisesPage },
-			{ title: '复习', component: ReviewingExercisesPage }
+			{ title: '复习', component: ReviewingExercisesPage },
+			{ title: '测试页', component: Page2 }
 		];
 
 	}

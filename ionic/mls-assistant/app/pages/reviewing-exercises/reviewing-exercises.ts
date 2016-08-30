@@ -19,16 +19,37 @@ export class ReviewingExercisesPage {
 
 
 	error: any;
-	summaries: HomeworkSummary[] = [];
+	summaries: Array<{
+		id: string,
+		title: string,
+		icon: string,
+		star: string,
+		arrowForward: string
+	}>;
 
-	constructor(public nav: NavController, private homeworkSvc: HomeworkService) {
+	constructor(public nav: NavController, public homeworkSvc: HomeworkService) {
+		
+		this.summaries = []
+		this.homeworkSvc.getReviewingExercisesSummaries()
+            .then(summaries => {
 
+				for (let i = 1; i < summaries.length; i++) {
+					this.summaries.push({
+						id: summaries[i].id,
+						title: summaries[i].title,
+						icon: summaries[i].icon,
+						star: summaries[i].star,
+						arrowForward: summaries[i].arrowForward
+					});
+				}
+
+				console.log(this.summaries);
+            })
+			.catch(error => this.error = error);
 	}
 
 	ngOnInit() {
-		this.homeworkSvc.getReviewingExercisesSummaries()
-            .then(summaries => this.summaries = summaries)
-			.catch(error => this.error = error);
+
 	}
 
 	ngOnDestroy() {

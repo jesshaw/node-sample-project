@@ -72,7 +72,7 @@ export class HomeworkService {
 					homeworkSumaries.push(emptyItem);
 				}
 				
-				// console.log(homeworkSumaries);
+				console.log(homeworkSumaries);
 				return homeworkSumaries;
 			})
 	}
