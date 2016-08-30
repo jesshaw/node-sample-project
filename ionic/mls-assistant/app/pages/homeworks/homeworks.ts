@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavController, Page } from 'ionic-angular';
 
-import { Homework } from '../../shared/homework';
+import { Homework, HomeworkSummary } from '../../shared/homework';
 import { HomeworkService } from '../../shared/homework.service';
 import { HomeworkPage } from '../homework/homework';
 
@@ -21,30 +21,15 @@ import 'rxjs/add/operator/toPromise';
 })
 export class HomeworksPage implements OnInit, OnDestroy {
 	error: any;
-	icons: string[] = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
-		'american-football', 'boat', 'bluetooth', 'build'];
-	items: Array<{ id: number, title: string, note: string, icon: string,showStar:string }>;
+	summaries: HomeworkSummary[] = [];
 
 	constructor(public nav: NavController, private homeworkSvc: HomeworkService) {
 
 	}
 
 	ngOnInit() {
-		this.homeworkSvc.getAllHomeworks()
-            .then(homeworks => {
-				this.items = [];
-				for (var i = 0; i < homeworks.length; ++i) {
-					var title = this.homeworkSvc.getTitle(homeworks[i].catgory);
-					this.items.push({
-						id: homeworks[i].id,
-						title: title,
-						note: Util.getString(new Date(homeworks[i].date)),
-						icon: this.icons[Math.floor(Math.random() * this.icons.length)],
-						showStar: Util.showStar(new Date(homeworks[i].date))
-					});
-				}
-				console.log(this.items);
-            })
+		this.homeworkSvc.getAllHomeworkSummaries()
+            .then(summaries => this.summaries = summaries)
 			.catch(error => this.error = error);
 	}
 
@@ -52,9 +37,10 @@ export class HomeworksPage implements OnInit, OnDestroy {
 	}
 
 	itemTapped(event, item) {
-		// That's right, we're pushing to ourselves!
-		this.nav.push(HomeworkPage, {
-			item: item
-		});
+		if (item.id) {
+			this.nav.push(HomeworkPage, {
+				item: item
+			});
+		}
 	}
 }

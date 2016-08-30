@@ -13,10 +13,16 @@
     </ion-navbar>
 </ion-header>
 <ion-content padding>
-    <ion-list>
-         <ion-item ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
+    <ion-list no-border>
+        <ion-list-header>
+            所有练习列表
+        </ion-list-header>
+        <ion-item *ngFor="let item of summaries" (click)="itemTapped($event, item)">
             <ion-icon [name]="item.icon" item-left></ion-icon>
-             {{item.note}} {{item.title}}
+            {{item.title}}
+            <ion-icon [name]="item.star" danger></ion-icon>
+            <!--  <ion-note item-right> 新 </ion-note>    -->
+            <ion-icon [name]="item.arrowForward" item-right></ion-icon>
         </ion-item>
     </ion-list>
 </ion-content>

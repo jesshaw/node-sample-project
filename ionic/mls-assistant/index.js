@@ -12,7 +12,7 @@ app.use(compression({ threshold: 1024 * 500, filter: shouldCompress }));
 
 function shouldCompress(req, res){
   return /json|text|javascript|/.test(res.getHeader('Content-Type'));
-};
+}
 
 app.use(express.static(__dirname + '/www'));
 

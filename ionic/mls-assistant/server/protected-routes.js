@@ -18,7 +18,7 @@ app.get('/api/protected/random-quote', function(req, res) {
 
 app.get('/api/protected/homeworks', function(req, res) {
 
-    console.log(req.query);
+    //console.log(req.query);
 
     Homework.find({theClass:req.query.theClass}, null, {sort: {date: -1}},function(err, docs) {
         if (err)
@@ -43,7 +43,7 @@ app.get('/api/homeworks/save', function(req, res) {
     });
 });
 
-//curl http://localhost:3001/api/homeworks/init
+//curl http://localhost:4001/api/homeworks/init
 
 app.get('/api/homeworks/init', function(req, res) {
     var homeworks=[];

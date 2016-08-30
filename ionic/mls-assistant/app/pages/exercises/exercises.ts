@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
 import {Util} from '../../shared/util';
-import { Homework } from '../../shared/homework';
+import { HomeworkSummary } from '../../shared/homework';
 import { HomeworkService } from '../../shared/homework.service';
 import { HomeworkPage } from '../homework/homework';
 
@@ -13,45 +13,32 @@ import { HomeworkPage } from '../homework/homework';
   Ionic pages and navigation.
 */
 @Component({
-  templateUrl: 'build/pages/exercises/exercises.html',
+	templateUrl: 'build/pages/exercises/exercises.html',
 })
 export class ExercisesPage {
 
- error: any;
-	homeworks: Homework[];
-	icons: string[];
-	items: Array<{ id:number,title: string, note: string, icon: string }>;
+	error: any;
+	summaries: HomeworkSummary[] = [];
 
-	constructor(public nav: NavController, private homeworkService: HomeworkService) {
-
-		// Let's populate this page with some filler content for funzies
-		this.icons = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
-			'american-football', 'boat', 'bluetooth', 'build'];
-
-		this.items = [];
-
-		this.homeworkService.getExercises()
-            .then(homeworks => {
-				for (var i = 0; i < homeworks.length; ++i) {
-					var currentHomework = homeworks[i];
-					var title = this.homeworkService.getTitle(currentHomework.catgory);
-					this.items.push({
-						id:currentHomework.id,
-						title: title,
-						note:  Util.getString(new Date(homeworks[i].date)),
-						icon: this.icons[Math.floor(Math.random() * this.icons.length)]
-					});
-				}
-            })
-			.catch(error => this.error = error);
+	constructor(public nav: NavController, private homeworkSvc: HomeworkService) {
 
 	}
 
+	ngOnInit() {
+		this.homeworkSvc.getExercisesSummaries()
+            .then(summaries => this.summaries = summaries)
+			.catch(error => this.error = error);
+	}
+
+	ngOnDestroy() {
+	}
+
 	itemTapped(event, item) {
-		// That's right, we're pushing to ourselves!
-		this.nav.push(HomeworkPage, {
-			item: item
-		});
+		if (item.id) {
+			this.nav.push(HomeworkPage, {
+				item: item
+			});
+		}
 	}
 
 }
