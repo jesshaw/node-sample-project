@@ -47,7 +47,7 @@ export class HomeworkService {
 					item.id = homeworks[i].id;
 					item.title = homeworks[i].title;
 					item.icon = icons[Math.floor(Math.random() * icons.length)];
-					item.star = Util.showStar(new Date(homeworks[i].date));
+					item.star = Util.showStar(homeworks[i].date);
 					item.arrowForward = 'arrow-forward'
 
 					if (catgory) {
@@ -71,12 +71,62 @@ export class HomeworkService {
 					emptyItem.arrowForward = ''
 					homeworkSumaries.push(emptyItem);
 				}
-				
+
 				console.log(homeworkSumaries);
 				return homeworkSumaries;
 			})
 	}
 
+	getAllHomeworkSummariesByMap() {
+
+
+		var icons: string[] = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
+			'american-football', 'boat', 'bluetooth', 'build'];
+
+		return Util.getCurrentClass()
+			.then(c => {
+				let params: URLSearchParams = new URLSearchParams();
+				params.set('theClass', c);
+
+				return Util.getAuthContentHeaders()
+					.then(contentHeaders => this.http.get(this.homeworksUrl, {
+						headers: contentHeaders,
+						search: params
+					}).toPromise())
+					.then(res => {
+						console.log(res);
+						var homeworks: Array<Homework> = [];
+						res.json().forEach(o => {
+							var item = new Homework();
+							item.id = o._id;
+							item.catgory = o.catgory;
+							item.catgoryDesc = this.getTitle(o.catgory);
+							item.theClass = o.theClass;
+							item.content = o.content;
+							item.date = new Date(o.date);
+							item.createTime = o.createTime;
+							item.updateTime = o.updateTime;
+							item.title = Util.getString(new Date(o.date)) + item.catgoryDesc;
+							homeworks.push(item);
+						})
+
+						var homeworkSummaries: Array<HomeworkSummary> = [];
+						homeworks.forEach(o => {
+							var item = new HomeworkSummary();
+							item.id = o.id;
+							item.title = o.title;
+							item.icon = icons[Math.floor(Math.random() * icons.length)];
+							item.star = Util.showStar(o.date);
+							item.arrowForward = 'arrow-forward';
+							homeworkSummaries.push(item);
+						});
+
+						return homeworkSummaries;
+					})
+			});
+	}
+
+	
 	private getAllHomeworks() {
 
 		return Util.getCurrentClass()
@@ -100,7 +150,7 @@ export class HomeworkService {
 							item.catgoryDesc = this.getTitle(jsonArray[i].catgory);
 							item.theClass = jsonArray[i].theClass;
 							item.content = jsonArray[i].content;
-							item.date = jsonArray[i].date;
+							item.date = new Date(jsonArray[i].date);
 							item.createTime = jsonArray[i].createTime;
 							item.updateTime = jsonArray[i].updateTime;
 							item.title = Util.getString(new Date(jsonArray[i].date)) + item.catgoryDesc

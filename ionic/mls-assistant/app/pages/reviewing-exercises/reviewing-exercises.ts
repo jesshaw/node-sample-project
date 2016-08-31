@@ -37,22 +37,25 @@ export class ReviewingExercisesPage {
 	}
 
 	ngOnInit() {
-		this.homeworkSvc.getReviewingExercisesSummaries()
-            .then(summaries => {
-				this.summaries = []
-				for (let i = 0; i < summaries.length; i++) {
-					this.summaries.push({
-						id: summaries[i].id,
-						title: summaries[i].title,
-						icon: summaries[i].icon,
-						star: summaries[i].star,
-						arrowForward: summaries[i].arrowForward
-					});
-				}
-
-				console.log(this.summaries);
-            })
+		this.homeworkSvc.getAllHomeworkSummariesByMap()
+		          .then(summaries => {
+		          				this.toSumries(summaries);
+		          				console.log(this.summaries);
+		          })
 			.catch(error => this.error = error);
+	}
+
+	toSumries(datas) {
+		this.summaries = []
+		for (let i = 0; i < datas.length; i++) {
+			this.summaries.push({
+				id: datas[i].id,
+				title: datas[i].title,
+				icon: datas[i].icon,
+				star: datas[i].star,
+				arrowForward: datas[i].arrowForward
+			});
+		}
 	}
 
 	ngOnDestroy() {

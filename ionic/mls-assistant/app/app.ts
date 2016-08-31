@@ -66,6 +66,8 @@ class MyApp {
 			if (!this.auth.authenticated()) {
 				var i = location.hash.indexOf("?");
 				if (location.hash.substring(2, i) === "wxlogin") {
+					this.local.remove('id_token');
+					
 					this.auth.login({
 						wxname: Util.getParameterByName("wxname"),
 						r: Util.getParameterByName("r")
