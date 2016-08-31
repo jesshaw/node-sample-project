@@ -20,11 +20,10 @@ export class Page2 {
     this.icons = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
       'american-football', 'boat', 'bluetooth', 'build'];
 
-    this.items = [];
     this.homeworkSvc.getReviewingExercisesSummaries()
             .then(summaries => {
         this.items = []
-        for (let i = 1; i < summaries.length; i++) {
+        for (let i = 0; i < summaries.length; i++) {
 
           this.items.push({
             title: summaries[i].title,

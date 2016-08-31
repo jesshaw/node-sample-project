@@ -6,8 +6,8 @@ import 'rxjs/add/operator/toPromise';
 
 export class Util {
 
-    static baseUrl="http://localhost:4001";
-    //static baseUrl="http://api.sanfor.com.cn";
+    // static baseUrl="http://localhost:4001";
+    static baseUrl="http://api.sanfor.com.cn";
 
     static getAuthContentHeaders() {
         var contentHeader = new Headers({ "Content-Type": "application/json" });

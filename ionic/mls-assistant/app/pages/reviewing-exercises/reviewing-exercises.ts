@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
+import {CORE_DIRECTIVES, FORM_DIRECTIVES} from '@angular/common';
 import { NavController } from 'ionic-angular';
 
 import {Util} from '../../shared/util';
 import { HomeworkSummary } from '../../shared/homework';
 import { HomeworkService } from '../../shared/homework.service';
 import { HomeworkPage } from '../homework/homework';
+
+import '../../shared/rxjs-extensions';
 
 /*
   Generated class for the ReviewingExercisesPage page.
@@ -14,6 +17,7 @@ import { HomeworkPage } from '../homework/homework';
 */
 @Component({
 	templateUrl: 'build/pages/reviewing-exercises/reviewing-exercises.html',
+	directives: [CORE_DIRECTIVES, FORM_DIRECTIVES]
 })
 export class ReviewingExercisesPage {
 
@@ -28,12 +32,15 @@ export class ReviewingExercisesPage {
 	}>;
 
 	constructor(public nav: NavController, public homeworkSvc: HomeworkService) {
-		
-		this.summaries = []
+
+
+	}
+
+	ngOnInit() {
 		this.homeworkSvc.getReviewingExercisesSummaries()
             .then(summaries => {
-
-				for (let i = 1; i < summaries.length; i++) {
+				this.summaries = []
+				for (let i = 0; i < summaries.length; i++) {
 					this.summaries.push({
 						id: summaries[i].id,
 						title: summaries[i].title,
@@ -46,10 +53,6 @@ export class ReviewingExercisesPage {
 				console.log(this.summaries);
             })
 			.catch(error => this.error = error);
-	}
-
-	ngOnInit() {
-
 	}
 
 	ngOnDestroy() {

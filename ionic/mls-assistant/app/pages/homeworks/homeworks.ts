@@ -8,7 +8,7 @@ import { HomeworkPage } from '../homework/homework';
 import {Util} from '../../shared/util';
 
 
-import 'rxjs/add/operator/toPromise';
+import '../../shared/rxjs-extensions';
 
 /*
   Generated class for the HomeworksPage page.

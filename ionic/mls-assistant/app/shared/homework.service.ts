@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, URLSearchParams } from '@angular/http';
 
-import 'rxjs/add/operator/toPromise';
+import './rxjs-extensions';
 
 import { Homework, HomeworkSummary } from './homework';
 import {Util} from './util';
