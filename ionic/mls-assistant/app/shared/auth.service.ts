@@ -38,37 +38,44 @@ export class AuthService {
 	}
 
 	public saveSettings(settings) {
-		return Util.getAuthContentHeaders()
-			.then(contentHeaders => this.http.post(this.USERSETTING_URL, JSON.stringify(settings), { headers: contentHeaders }).toPromise())
-			.then(response => {
-				console.log(response.json());
-				return response.json();
-			});
+		return new Promise<any>(resolve => {
+			Util.getAuthContentHeaders()
+				.then(contentHeaders => {
+					this.http.post(this.USERSETTING_URL, JSON.stringify(settings), { headers: contentHeaders })
+						.subscribe(response => {
+							console.log(response.json());
+							resolve(response.json());
+						})
+				});
+		});
 	}
 
-	public getUser(username) {
+	public getUser(username): Promise<User> {
+
+
 		let params: URLSearchParams = new URLSearchParams();
 		params.set('username', username);
 
-		return Util.getAuthContentHeaders()
-			.then(contentHeaders => this.http.get(this.GETUSER_URL, {
-				headers: contentHeaders,
-				search: params
-			}).toPromise())
-			.then(response => {
-				var json = response.json().user;
-				var u = new User();
-				u.username = json.username;
-				u.password = json.password == '666666' ? ' 初始密码666666修改后显示*' : '******';
-				u.roles = json.roles;
-				u.rolesArray = json.roles.split(',');
-				u.wxUsername = json.wxUsername;
-				u.isBindWx = json.wxUsername ? true : false;
-				var theClass = u.rolesArray.find(r => r.indexOf('class') >= 0);
-				u.theClass = theClass
-				u.theClassDesc = theClass ? Classes.getClasses().find(c => c.value == u.theClass).name : '选班后可查看作业';
-				return u;
-			})
+		return new Promise<User>(resolve => {
+			Util.getAuthContentHeaders()
+				.then(contentHeaders => {
+					this.http.get(this.GETUSER_URL, { headers: contentHeaders, search: params })
+						.subscribe(response => {
+							var json = response.json().user;
+							var u = new User();
+							u.username = json.username;
+							u.password = json.password == '666666' ? ' 初始密码666666修改后显示*' : '******';
+							u.roles = json.roles;
+							u.rolesArray = json.roles.split(',');
+							u.wxUsername = json.wxUsername;
+							u.isBindWx = json.wxUsername ? true : false;
+							var theClass = u.rolesArray.find(r => r.indexOf('class') >= 0);
+							u.theClass = theClass
+							u.theClassDesc = theClass ? Classes.getClasses().find(c => c.value == u.theClass).name : '选班后可查看作业';
+							resolve(u);
+						})
+				});
+		});
 	}
 
 

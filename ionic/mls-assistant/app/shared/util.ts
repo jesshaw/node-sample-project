@@ -1,48 +1,54 @@
 import { Headers } from '@angular/http';
 import { Storage, LocalStorage } from 'ionic-angular';
-import {JwtHelper} from 'angular2-jwt';
+import {JwtHelper, AuthHttp } from 'angular2-jwt';
 
-import 'rxjs/add/operator/toPromise';
+import './rxjs-extensions';
 
 export class Util {
 
     // static baseUrl="http://localhost:4001";
-    static baseUrl="http://api.sanfor.com.cn";
+    static baseUrl = "http://api.sanfor.com.cn";
 
-    static getAuthContentHeaders() {
-        var contentHeader = new Headers({ "Content-Type": "application/json" });
-
-        return this.getToken()
-            .then(profile => profile)
-            .then(token => {
-                contentHeader.append("authorization", 'Bearer ' + token);
-                return contentHeader;
-            });
-
+    static getAuthContentHeaders(): Promise<Headers> {
+        var promise = new Promise<Headers>(resolve => {
+            this.getToken()
+                .then(token => {
+                    var contentHeader = new Headers({ "Content-Type": "application/json" });
+                    contentHeader.append("authorization", 'Bearer ' + token);
+                    resolve(contentHeader);
+                });
+        })
+        return promise;
     }
 
-    static getContentHeaders() {
-        return new Headers({ "Content-Type": "application/json" });
+
+    static getContentHeaders(): Promise<Headers> {
+        return new Promise<Headers>(resolve => {
+            resolve(new Headers({ "Content-Type": "application/json" }));
+        });
+    }
+
+   
+
+    static getCurrentClass(): Promise<string> {
+        return new Promise<string>(resolve => {
+            this.getToken()
+                .then(token => {
+                    var o = this.getDecodeObject(token);
+                    var c = o.roles.split(',').find(r => r.indexOf('class') >= 0);
+                    resolve(c);
+                });
+        });
+    }
+
+    static getToken(): Promise<any> {
+        var local = new Storage(LocalStorage);
+        return local.get('id_token');
     }
 
     static getDecodeObject(token: string) {
         var jwtHelper = new JwtHelper();
         return jwtHelper.decodeToken(token);
-    }
-
-    static getCurrentClass() {
-        return this.getToken()
-            .then(profile => profile)
-            .then(token => {
-                var o = this.getDecodeObject(token);
-                var c = o.roles.split(',').find(r => r.indexOf('class') >= 0);
-                return c;
-            });
-    }
-
-    static getToken() {
-        var local = new Storage(LocalStorage);
-        return local.get('id_token');
     }
 
     // // query string: ?foo=lorem&bar=&baz
@@ -60,12 +66,12 @@ export class Util {
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
 
-    static getString(date:Date){
-        return date.getFullYear()+'年'+(date.getMonth()+1)+'月'+date.getDate()+'日';
+    static getString(date: Date) {
+        return date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日';
     }
 
-    static showStar(date:Date){        
-        return date.toLocaleDateString()===(new Date()).toLocaleDateString()?'star':'';
+    static showStar(date: Date) {
+        return date.toLocaleDateString() === (new Date()).toLocaleDateString() ? 'star' : '';
     }
 
 

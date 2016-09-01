@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, URLSearchParams } from '@angular/http';
+import {AuthHttp} from 'angular2-jwt';
 
 import './rxjs-extensions';
 
@@ -10,8 +11,10 @@ import {Util} from './util';
 export class HomeworkService {
 
 	homeworksUrl: string = Util.baseUrl + "/api/protected/homeworks";
+	homeworksUrlTest: string = Util.baseUrl + "/api/homeworks";
 
-	constructor(private http: Http) { }
+
+	constructor(private http: Http, private autHttp: AuthHttp) { }
 
 	public getAllHomeworkSummaries() {
 		return this.getHomeworkSummariesByCategory();
@@ -29,12 +32,12 @@ export class HomeworkService {
 		return this.getHomeworkSummariesByCategory('3');
 	}
 
-	public getHomework(id: number) {
+	public getHomework(id: string) {
 		return this.getAllHomeworks()
 			.then(homeworks => homeworks.find(homework => homework.id === id));//返回一个实体值
 	}
 
-	private getHomeworkSummariesByCategory(catgory?: string) {
+	private getHomeworkSummariesByCategory(catgory?: string): Promise<Array<HomeworkSummary>> {
 
 		var icons: string[] = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
 			'american-football', 'boat', 'bluetooth', 'build'];
@@ -79,67 +82,68 @@ export class HomeworkService {
 
 	getAllHomeworkSummariesByMap() {
 
-
 		var icons: string[] = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
 			'american-football', 'boat', 'bluetooth', 'build'];
 
-		return Util.getCurrentClass()
-			.then(c => {
-				let params: URLSearchParams = new URLSearchParams();
-				params.set('theClass', c);
+		return new Promise<Array<HomeworkSummary>>(resolve => {
 
-				return Util.getAuthContentHeaders()
-					.then(contentHeaders => this.http.get(this.homeworksUrl, {
-						headers: contentHeaders,
-						search: params
-					}).toPromise())
-					.then(res => {
-						console.log(res);
-						var homeworks: Array<Homework> = [];
-						res.json().forEach(o => {
-							var item = new Homework();
-							item.id = o._id;
-							item.catgory = o.catgory;
-							item.catgoryDesc = this.getTitle(o.catgory);
-							item.theClass = o.theClass;
-							item.content = o.content;
-							item.date = new Date(o.date);
-							item.createTime = o.createTime;
-							item.updateTime = o.updateTime;
-							item.title = Util.getString(new Date(o.date)) + item.catgoryDesc;
-							homeworks.push(item);
-						})
+			this.http.get(this.homeworksUrlTest + '?theClass=class1')
+				.map(res => {
+					console.log(res.json());
+					var homeworks: Array<Homework> = [];
+					res.json().forEach(o => {
+						var item = new Homework();
+						item.id = o._id;
+						item.catgory = o.catgory;
+						item.catgoryDesc = this.getTitle(o.catgory);
+						item.theClass = o.theClass;
+						item.content = o.content;
+						item.date = new Date(o.date);
+						item.createTime = o.createTime;
+						item.updateTime = o.updateTime;
+						// item.title = Util.getString(new Date(o.date)) + item.catgoryDesc;
+						item.title = Util.getString(new Date(o.date)) + item.catgoryDesc;
+						homeworks.push(item);
+					});
+					return homeworks;
+				}).subscribe(homeworks => {
 
-						var homeworkSummaries: Array<HomeworkSummary> = [];
-						homeworks.forEach(o => {
-							var item = new HomeworkSummary();
-							item.id = o.id;
-							item.title = o.title;
-							item.icon = icons[Math.floor(Math.random() * icons.length)];
-							item.star = Util.showStar(o.date);
-							item.arrowForward = 'arrow-forward';
-							homeworkSummaries.push(item);
-						});
+					var homeworkSummaries: Array<HomeworkSummary> = [];
+					homeworks.forEach(o => {
+						var item = new HomeworkSummary();
+						item.id = o.id;
+						item.title = o.title;
+						item.icon = icons[Math.floor(Math.random() * icons.length)];
+						// item.star = Util.showStar(o.date);
+						item.star = '';
+						item.arrowForward = 'arrow-forward';
+						homeworkSummaries.push(item);
+					});
 
-						return homeworkSummaries;
-					})
-			});
+					resolve(homeworkSummaries);
+				})
+		});
 	}
 
-	
-	private getAllHomeworks() {
 
-		return Util.getCurrentClass()
+	private getAllHomeworks(): Promise<Array<Homework>> {
+
+		return new Promise<Array<Homework>>(resolve => Util.getCurrentClass()
 			.then(c => {
 				let params: URLSearchParams = new URLSearchParams();
 				params.set('theClass', c);
-
-				return Util.getAuthContentHeaders()
-					.then(contentHeaders => this.http.get(this.homeworksUrl, {
-						headers: contentHeaders,
-						search: params
-					}).toPromise())
-					.then(response => {
+				return new Promise(resolve => resolve(params));
+			})
+			.then(params => {
+				return new Promise(resolve => {
+					Util.getAuthContentHeaders().then(contentHeaders => {
+						resolve({ headers: contentHeaders, search: params })
+					});
+				});
+			})
+			.then(authHeaders => {
+				this.http.get(this.homeworksUrl, authHeaders)
+					.subscribe(response => {
 						// return response.json() as Homework[];
 						var homeworks = [];
 						var jsonArray = response.json();
@@ -158,9 +162,9 @@ export class HomeworkService {
 						}
 						// console.log(homeworks);
 
-						return homeworks;
-					})
-			});
+						resolve(homeworks);
+					});
+			}));
 	}
 
 

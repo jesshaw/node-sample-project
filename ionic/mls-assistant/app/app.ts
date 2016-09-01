@@ -24,7 +24,7 @@ import {Page2} from './pages/page2/page2';
 	providers: [
 		provide(AuthHttp, {
 			useFactory: (http) => {
-				return new AuthHttp(new AuthConfig, http);
+				return new AuthHttp(new AuthConfig(), http);
 			},
 			deps: [Http]
 		}),
@@ -83,7 +83,7 @@ class MyApp {
 		});
 	}
 
-	authSuccess(token) {
+	authSuccess(token) {		
 		this.error = null;
 		this.local.set('id_token', token);
 		var roles: string = Util.getDecodeObject(token).roles
@@ -108,3 +108,14 @@ ionicBootstrap(MyApp, [
     // ,	{ provide: XHRBackend, useClass: InMemoryBackendService }, // in-mem server
     // { provide: SEED_DATA, useClass: InMemoryDataService }      // in-mem server data]
 ]);
+
+
+// ionicBootstrap(MyApp, [
+//   provide(AuthHttp, {
+//     useFactory: (http) => {
+//       return new AuthHttp(new AuthConfig({noJwtError: true}), http);
+//     },
+//     deps: [Http]
+//   }),
+//   AuthService
+// ])
