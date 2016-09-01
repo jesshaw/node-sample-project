@@ -23,13 +23,7 @@ export class ReviewingExercisesPage {
 
 
 	error: any;
-	summaries: Array<{
-		id: string,
-		title: string,
-		icon: string,
-		star: string,
-		arrowForward: string
-	}>;
+	summaries: Array<HomeworkSummary>;
 
 	constructor(public nav: NavController, public homeworkSvc: HomeworkService) {
 
@@ -38,10 +32,7 @@ export class ReviewingExercisesPage {
 
 	ngOnInit() {
 		this.homeworkSvc.getAllHomeworkSummariesByMap()
-		          .then(summaries => {
-		          				this.toSumries(summaries);
-		          				console.log(this.summaries);
-		          })
+			.then(summaries => this.summaries = summaries)
 			.catch(error => this.error = error);
 	}
 

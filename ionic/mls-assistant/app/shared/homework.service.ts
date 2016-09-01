@@ -16,7 +16,7 @@ export class HomeworkService {
 
 	constructor(private http: Http, private autHttp: AuthHttp) { }
 
-	public getAllHomeworkSummaries() {
+	public getAllHomeworkSummaries(): Promise<Array<HomeworkSummary>> {
 		return this.getHomeworkSummariesByCategory();
 	}
 
@@ -65,6 +65,7 @@ export class HomeworkService {
 						homeworkSumaries.push(item);
 					}
 				}
+
 				if (homeworkSumaries.length <= 0) {
 					var emptyItem = new HomeworkSummary();
 					emptyItem.id = '';
@@ -128,43 +129,46 @@ export class HomeworkService {
 
 	private getAllHomeworks(): Promise<Array<Homework>> {
 
-		return new Promise<Array<Homework>>(resolve => Util.getCurrentClass()
-			.then(c => {
-				let params: URLSearchParams = new URLSearchParams();
-				params.set('theClass', c);
-				return new Promise(resolve => resolve(params));
-			})
-			.then(params => {
-				return new Promise(resolve => {
-					Util.getAuthContentHeaders().then(contentHeaders => {
-						resolve({ headers: contentHeaders, search: params })
-					});
-				});
-			})
-			.then(authHeaders => {
-				this.http.get(this.homeworksUrl, authHeaders)
-					.subscribe(response => {
-						// return response.json() as Homework[];
-						var homeworks = [];
-						var jsonArray = response.json();
-						for (var i = 0; i < jsonArray.length; ++i) {
-							var item = new Homework();
-							item.id = jsonArray[i]._id;
-							item.catgory = jsonArray[i].catgory;
-							item.catgoryDesc = this.getTitle(jsonArray[i].catgory);
-							item.theClass = jsonArray[i].theClass;
-							item.content = jsonArray[i].content;
-							item.date = new Date(jsonArray[i].date);
-							item.createTime = jsonArray[i].createTime;
-							item.updateTime = jsonArray[i].updateTime;
-							item.title = Util.getString(new Date(jsonArray[i].date)) + item.catgoryDesc
-							homeworks.push(item);
-						}
-						// console.log(homeworks);
+		return new Promise<Array<Homework>>(resolve =>
 
-						resolve(homeworks);
-					});
-			}));
+			Util.getCurrentClass()
+				.then(c => {
+					let params: URLSearchParams = new URLSearchParams();
+					params.set('theClass', c);
+					return params;
+				})
+				.then(params => {
+					return Util.getAuthContentHeaders()
+						.then(contentHeaders => {
+							return { headers: contentHeaders, search: params };
+						})
+				})
+				.then(authHeaders => {
+					this.http.get(this.homeworksUrl, authHeaders)
+						.map(res => res.json())
+						.subscribe(bodyJson => {
+							// return response.json() as Homework[];
+							var homeworks = [];
+							var jsonArray = bodyJson;
+							for (var i = 0; i < jsonArray.length; ++i) {
+								var item = new Homework();
+								item.id = jsonArray[i]._id;
+								item.catgory = jsonArray[i].catgory;
+								item.catgoryDesc = this.getTitle(jsonArray[i].catgory);
+								item.theClass = jsonArray[i].theClass;
+								item.content = jsonArray[i].content;
+								item.date = new Date(jsonArray[i].date);
+								item.createTime = jsonArray[i].createTime;
+								item.updateTime = jsonArray[i].updateTime;
+								item.title = Util.getString(new Date(jsonArray[i].date)) + item.catgoryDesc
+								homeworks.push(item);
+							}
+							// console.log(homeworks);
+
+							resolve(homeworks);
+						});
+				})
+		);
 	}
 
 

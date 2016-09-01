@@ -10,15 +10,21 @@ export class Util {
     static baseUrl = "http://api.sanfor.com.cn";
 
     static getAuthContentHeaders(): Promise<Headers> {
-        var promise = new Promise<Headers>(resolve => {
-            this.getToken()
-                .then(token => {
-                    var contentHeader = new Headers({ "Content-Type": "application/json" });
-                    contentHeader.append("authorization", 'Bearer ' + token);
-                    resolve(contentHeader);
-                });
-        })
-        return promise;
+        return this.getToken()
+            .then(token => {
+                var contentHeader = new Headers({ "Content-Type": "application/json" });
+                contentHeader.append("authorization", 'Bearer ' + token);
+                return contentHeader;
+            });
+        // var promise = new Promise<Headers>(resolve => {
+        //     this.getToken()
+        //         .then(token => {
+        //             var contentHeader = new Headers({ "Content-Type": "application/json" });
+        //             contentHeader.append("authorization", 'Bearer ' + token);
+        //             resolve(contentHeader);
+        //         });
+        // })
+        // return promise;
     }
 
 
@@ -28,17 +34,16 @@ export class Util {
         });
     }
 
-   
+
 
     static getCurrentClass(): Promise<string> {
-        return new Promise<string>(resolve => {
-            this.getToken()
-                .then(token => {
-                    var o = this.getDecodeObject(token);
-                    var c = o.roles.split(',').find(r => r.indexOf('class') >= 0);
-                    resolve(c);
-                });
-        });
+        return this.getToken()
+                     .then(token => {
+                            var o = this.getDecodeObject(token);
+                            var c = o.roles.split(',').find(r => r.indexOf('class') >= 0);
+                            return c;
+                     });
+
     }
 
     static getToken(): Promise<any> {
