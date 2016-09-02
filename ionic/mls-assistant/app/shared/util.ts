@@ -28,10 +28,8 @@ export class Util {
     }
 
 
-    static getContentHeaders(): Promise<Headers> {
-        return new Promise<Headers>(resolve => {
-            resolve(new Headers({ "Content-Type": "application/json" }));
-        });
+    static getContentHeaders():Headers {
+        return new Headers({ "Content-Type": "application/json" });
     }
 
 

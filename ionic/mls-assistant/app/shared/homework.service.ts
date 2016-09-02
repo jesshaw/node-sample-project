@@ -37,58 +37,60 @@ export class HomeworkService {
 			.then(homeworks => homeworks.find(homework => homework.id === id));//返回一个实体值
 	}
 
-	private getHomeworkSummariesByCategory(catgory?: string): Promise<Array<HomeworkSummary>> {
-
-		var icons: string[] = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
-			'american-football', 'boat', 'bluetooth', 'build'];
-
-		return this.getAllHomeworks()
-			.then(homeworks => {
-				var homeworkSumaries = []
-				for (var i = 0; i < homeworks.length; ++i) {
-					var item = new HomeworkSummary();
-					item.id = homeworks[i].id;
-					item.title = homeworks[i].title;
-					item.icon = icons[Math.floor(Math.random() * icons.length)];
-					item.star = Util.showStar(homeworks[i].date);
-					item.arrowForward = 'arrow-forward'
-
-					if (catgory) {
-						if (catgory == homeworks[i].catgory) {
-							homeworkSumaries.push(item);
-						}
-						else {
-							continue;
-						}
-					}
-					else {
-						homeworkSumaries.push(item);
-					}
-				}
-
-				if (homeworkSumaries.length <= 0) {
-					var emptyItem = new HomeworkSummary();
-					emptyItem.id = '';
-					emptyItem.title = '没有内容，待老师添加。';
-					emptyItem.icon = '';
-					emptyItem.star = '';
-					emptyItem.arrowForward = ''
-					homeworkSumaries.push(emptyItem);
-				}
-
-				console.log(homeworkSumaries);
-				return homeworkSumaries;
-			})
-	}
-
-	getAllHomeworkSummariesByMap() {
+	public getHomeworkSummariesByCategory(catgory?: string): Promise<Array<HomeworkSummary>> {
 
 		var icons: string[] = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
 			'american-football', 'boat', 'bluetooth', 'build'];
 
 		return new Promise<Array<HomeworkSummary>>(resolve => {
+			this.getAllHomeworks()
+				.then(homeworks => {
+					var homeworkSumaries = []
+					for (var i = 0; i < homeworks.length; ++i) {
+						var item = new HomeworkSummary();
+						item.id = homeworks[i].id;
+						item.title = homeworks[i].title;
+						item.icon = icons[Math.floor(Math.random() * icons.length)];
+						item.star = Util.showStar(homeworks[i].date);
+						item.arrowForward = 'arrow-forward'
 
-			this.http.get(this.homeworksUrlTest + '?theClass=class1')
+						if (catgory) {
+							if (catgory == homeworks[i].catgory) {
+								homeworkSumaries.push(item);
+							}
+							else {
+								continue;
+							}
+						}
+						else {
+							homeworkSumaries.push(item);
+						}
+					}
+
+					if (homeworkSumaries.length <= 0) {
+						var emptyItem = new HomeworkSummary();
+						emptyItem.id = '';
+						emptyItem.title = '没有内容，待老师添加。';
+						emptyItem.icon = '';
+						emptyItem.star = '';
+						emptyItem.arrowForward = ''
+						homeworkSumaries.push(emptyItem);
+					}
+
+					console.log(homeworkSumaries);
+					resolve(homeworkSumaries);
+				})
+		});
+	}
+
+	getAllHomeworkSummariesByMap() {
+		var icons: string[] = ['flask', 'wifi', 'beer', 'football', 'basketball', 'paper-plane',
+			'american-football', 'boat', 'bluetooth', 'build'];
+
+		return new Promise<Array<HomeworkSummary>>(resolve => {
+			let params: URLSearchParams = new URLSearchParams();
+					params.set('theClass', 'class1');
+			this.autHttp.get(this.homeworksUrl,{search:params})
 				.map(res => {
 					console.log(res.json());
 					var homeworks: Array<Homework> = [];
@@ -138,16 +140,11 @@ export class HomeworkService {
 					return params;
 				})
 				.then(params => {
-					return Util.getAuthContentHeaders()
-						.then(contentHeaders => {
-							return { headers: contentHeaders, search: params };
-						})
-				})
-				.then(authHeaders => {
-					this.http.get(this.homeworksUrl, authHeaders)
+					var headers={ headers:Util.getContentHeaders(), search: params };
+
+					this.autHttp.get(this.homeworksUrl, headers)
 						.map(res => res.json())
 						.subscribe(bodyJson => {
-							// return response.json() as Homework[];
 							var homeworks = [];
 							var jsonArray = bodyJson;
 							for (var i = 0; i < jsonArray.length; ++i) {
@@ -182,12 +179,6 @@ export class HomeworkService {
 			title = '复习'
 		}
 		return title;
-	}
-
-	private getHomeworksByCategory(catgory: string) {
-		return this.getAllHomeworks().then(homeworks =>
-			homeworks.filter(homework => homework.catgory === catgory)
-		);
 	}
 
 	private handleError(error: any) {

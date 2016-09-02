@@ -50,7 +50,7 @@ class MyApp {
 			{ title: '课后作业', component: HomeworksPage },
 			{ title: '练习', component: ExercisesPage },
 			{ title: '复习', component: ReviewingExercisesPage },
-			{ title: '测试页', component: Page2 }
+			// { title: '测试页', component: Page2 }
 		];
 
 	}
@@ -93,7 +93,6 @@ class MyApp {
 		else {
 			this.nav.setRoot(ProfilePage);
 		}
-
 	}
 
 	openPage(page) {
