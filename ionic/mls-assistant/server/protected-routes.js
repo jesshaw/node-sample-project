@@ -20,7 +20,7 @@ app.get('/api/protected/homeworks', function(req, res) {
 
     //console.log(req.query);
 
-    Homework.find({theClass:req.query.theClass}, null, {sort: {date: -1}},function(err, docs) {
+    Homework.find({ theClass: req.query.theClass }, null, { sort: { date: -1 } }, function(err, docs) {
         if (err)
             return next(err);
         // console.dir(docs);
@@ -28,13 +28,16 @@ app.get('/api/protected/homeworks', function(req, res) {
     });
 });
 
-app.get('/api/homeworks/save', function(req, res) {
+app.post('/api/homeworks/save', function(req, res) {
+    console.log(req.body);
     var homework = new Homework({
-        catgory: req.catgory,
-        date: new date(req.date),
-        content: req.content,
+        catgory: req.body.catgory,
+        date: new Date(req.body.date),
+        theClass: req.body.theClass,
+        content: req.body.content,
         createTime: new Date().getTime(),
-        updateTime: new Date().getTime()        
+        updateTime: new Date().getTime(),
+        status: req.body.status,
     });
 
     homework.save(function(err, homework) {
@@ -46,7 +49,7 @@ app.get('/api/homeworks/save', function(req, res) {
 //curl http://localhost:4001/api/homeworks/init
 
 app.get('/api/homeworks/init', function(req, res) {
-    var homeworks=[];
+    var homeworks = [];
     homeworks.push(new Homework({
         catgory: "1",
         theClass: "class1",
@@ -72,15 +75,13 @@ app.get('/api/homeworks/init', function(req, res) {
         content: '<h2> 查看复习题 </h2> <h3> 中译日 </h3>',
         createTime: new Date().getTime(),
         updateTime: new Date().getTime()
-    }));    
+    }));
 
     for (var i = 0; i < homeworks.length; i++) {
         homeworks[i].save(function(err, homework) {
-            if (err) 
-            	return console.error(err);
+            if (err)
+                return console.error(err);
             res.status(200).send(homework);
         });
     }
 });
-
-

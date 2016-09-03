@@ -5,7 +5,8 @@ var homeworkSchema = Schema({
     date: Date,
     content: String,
     createTime: Date,
-    updateTime: Date
+    updateTime: Date,
+    status: String,
 });
 /* global db */
 module.exports = db.model('Homework', homeworkSchema, 'homework');

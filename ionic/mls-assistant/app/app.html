@@ -7,6 +7,12 @@
             <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
                 {{p.title}}
             </button>
+            <a class="item" href="#" onclick="window.open('homework/assigned.html',  '_self', 'location=yes'); return false;">
+                布置作业
+            </a>
+            <!-- <a class="item" href="#" onclick="window.open('https://plus.google.com/+NicRaboy', '_system', 'location=yes'); return false;">
+                Open a Google+ Client or Browser
+            </a> -->
         </ion-list>
     </ion-content>
 </ion-menu>
