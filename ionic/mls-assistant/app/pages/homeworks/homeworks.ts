@@ -22,9 +22,10 @@ import '../../shared/rxjs-extensions';
 export class HomeworksPage implements OnInit, OnDestroy {
 	error: any;
 	summaries: HomeworkSummary[] = [];
+	isTeacher: boolean;
 
 	constructor(public nav: NavController, private homeworkSvc: HomeworkService) {
-
+		Util.getToken().then(t => this.authSuccess(t));
 	}
 
 	ngOnInit() {
@@ -36,11 +37,20 @@ export class HomeworksPage implements OnInit, OnDestroy {
 	ngOnDestroy() {
 	}
 
+	authSuccess(token) {
+		var roles: string = Util.getDecodeObject(token).roles
+		this.isTeacher = roles.indexOf('teacher') >= 0;
+	}
+
 	itemTapped(event, item) {
 		if (item.id) {
 			this.nav.push(HomeworkPage, {
 				item: item
 			});
 		}
+	}
+
+	openUrl(item) {
+		window.open('homework/assigned.html?id=' + item.id, '_self', 'location=yes');
 	}
 }

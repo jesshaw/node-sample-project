@@ -52,6 +52,9 @@ var initSample = (function() {
 })();
 
 $(document).ready(function() {
+    var baseUrl = "http://api.sanfor.com.cn";
+    // var baseUrl = "http://localhost:4001";
+    // 
     var el = {
         id: $('#id'),
         date: $('#date'),
@@ -60,10 +63,10 @@ $(document).ready(function() {
         content: $('#editor'),
         saveButton: $('#save'),
         releaseButton: $('#release'),
-        back:$('#back'),
+        back: $('#back'),
     };
-    var now = new Date();
-    el.date.val(now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate());
+    load();
+
 
     el.date.focus(function() {
         el.date.siblings().html('');
@@ -128,14 +131,38 @@ $(document).ready(function() {
         save("0");
     });
 
+    function load() {
+        var id = getParameterByName("id");
+        if (id) {
+            $.get(baseUrl + "/api/homework?id=" + id, function(data) {
+                // alert(data);
+                if (data && data.length > 0) {
+                    el.id.val(data[0]._id);
+
+                    el.catgory.val(data[0].catgory);
+                    el.date.val(data[0].date.substring(0,10));
+                    // el.content.html(data[0].content);
+                    CKEDITOR.instances.editor.setData(data[0].content);
+                    el.theClass.val(data[0].theClass);
+
+                }
+
+            });
+        }
+
+        if (!el.date.val()) {
+            var now = new Date();
+            el.date.val(now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate());
+        }
+    }
+
     function save(status) {
-        // var baseUrl = "http://api.sanfor.com.cn";
-        var baseUrl = "http://localhost:4001";
+
         $.post(baseUrl + "/api/homeworks/save", {
                 "id": el.id.val(),
                 "catgory": el.catgory.val(),
                 "date": el.date.val(),
-                "content": el.content.html(),
+                "content": CKEDITOR.instances.editor.getData(),
                 "theClass": el.theClass.val(),
                 "status": status
             },
@@ -156,7 +183,19 @@ $(document).ready(function() {
         save("1");
     });
 
-    el.back.click(function(){
-        location.href='/';
-    })
+    el.back.click(function() {
+        location.href = '/';
+    });
+
+
+
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
 });

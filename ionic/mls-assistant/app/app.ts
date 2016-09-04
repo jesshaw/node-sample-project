@@ -40,6 +40,7 @@ class MyApp {
 	pages: Array<{ title: string, component: any }>;
 	error: string;
 	local: Storage = new Storage(LocalStorage);
+	isTeacher: boolean;
 
 	constructor(public platform: Platform, private auth: AuthService) {
 		this.initializeApp();
@@ -67,7 +68,7 @@ class MyApp {
 				var i = location.hash.indexOf("?");
 				if (location.hash.substring(2, i) === "wxlogin") {
 					this.local.remove('id_token');
-					
+
 					this.auth.login({
 						wxname: Util.getParameterByName("wxname"),
 						r: Util.getParameterByName("r")
@@ -80,14 +81,18 @@ class MyApp {
 					this.rootPage = LoginPage;
 				}
 			}
+			else {
+				Util.getToken().then(t => this.authSuccess(t));
+			}
 		});
 	}
 
-	authSuccess(token) {		
+	authSuccess(token) {
 		this.error = null;
 		this.local.set('id_token', token);
 		var roles: string = Util.getDecodeObject(token).roles
-		if (roles.indexOf('class') > 0) {
+		this.isTeacher = roles.indexOf('teacher') >= 0;
+		if (roles.indexOf('class') >= 0) {
 			this.nav.setRoot(HomeworksPage);
 		}
 		else {

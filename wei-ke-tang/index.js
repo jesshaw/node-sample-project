@@ -6,10 +6,17 @@ var request = require('request');
 
 var app = express();
 
+// var weixin = new Weixin({
+//     app: app,
+//     appid: 'wx55bc1ff001c62342',
+//     appsecret: '72da6c0d4302d80d176faa544f0bcf3b',
+//     token: 'mymiaowangtoken'
+// });
+
 var weixin = new Weixin({
     app: app,
-    appid: 'wx55bc1ff001c62342',
-    appsecret: '72da6c0d4302d80d176faa544f0bcf3b',
+    appid: 'wxea8513d7b2ea6c33',
+    appsecret: '25ade240a4b2629571bd2d872b150949',
     token: 'mymiaowangtoken'
 });
 

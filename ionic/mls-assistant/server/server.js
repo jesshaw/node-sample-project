@@ -9,7 +9,7 @@ var logger          = require('morgan'),
     mongoose        = require('mongoose');
 
 var app = express();
-var uri = 'mongodb://127.0.0.1:27017/test';
+var uri = 'mongodb://127.0.0.1:27017/mls';
 global.db = mongoose.createConnection(uri);
 
 dotenv.load();

@@ -42,17 +42,17 @@ export class LoginPage {
 
 	constructor(private http: Http, private auth: AuthService, private nav: NavController) {
 
-		let token;
-		this.local.get('id_token').then(profile => {
-			// token = JSON.parse(profile);
-			token = profile;
-			if (token) {
-				this.user = this.jwtHelper.decodeToken(token).username;
-				this.roles = this.jwtHelper.decodeToken(token).roles;
-			}
-		}).catch(error => {
-			console.log(error);
-		});
+		// let token;
+		// this.local.get('id_token').then(profile => {
+		// 	// token = JSON.parse(profile);
+		// 	token = profile;
+		// 	if (token) {
+		// 		this.user = this.jwtHelper.decodeToken(token).username;
+		// 		this.roles = this.jwtHelper.decodeToken(token).roles;
+		// 	}
+		// }).catch(error => {
+		// 	console.log(error);
+		// });
 
 
 	}
@@ -87,7 +87,7 @@ export class LoginPage {
 		this.user = this.jwtHelper.decodeToken(token).username;
 
 		var roles: string = Util.getDecodeObject(token).roles		
-		if (roles.indexOf('class') > 0) {
+		if (roles.indexOf('class') >= 0) {
 			this.nav.setRoot(HomeworksPage);
 		}
 		else {

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { NavController, Alert, Storage, LocalStorage, Page } from 'ionic-angular';
+import { NavController, Alert, Storage, LocalStorage, Page, Toast} from 'ionic-angular';
 import {Http, Headers} from '@angular/http';
 import {CORE_DIRECTIVES, FORM_DIRECTIVES} from '@angular/common';
 import {JwtHelper} from 'angular2-jwt';
@@ -45,10 +45,10 @@ export class ProfilePage implements OnInit, OnDestroy {
 				console.log(this.theClassValue);
 			})
 
-		this.classes = [];
-		this.classes.push({ name: '一班', value: 'class1' });
-		this.classes.push({ name: '二班', value: 'class2' });
-		this.classes.push({ name: '三班', value: 'class3' });
+		// this.classes = [];
+		// this.classes.push({ name: '141旅游', value: 'class1' });
+		// this.classes.push({ name: '151旅游', value: 'class2' });
+		// this.classes.push({ name: '140化学工程', value: 'class3' });
 	}
 
 	ngOnInit() {
@@ -102,13 +102,70 @@ export class ProfilePage implements OnInit, OnDestroy {
 				this.user.theClass = data;
 				this.user.theClassDesc = classes.find(c => c.value == data).name;
 				var newRoles = this.user.roles.split(',').filter(r => r.indexOf('class') < 0);
-				newRoles.push(data);				
+				newRoles.push(data);
 				this.user.roles = newRoles.join(',');
 				this.save();
 			}
 		});
 		this.nav.present(alert);
 	}
+
+	selectLoginName() {
+		let alert = Alert.create();
+		alert.setTitle('更改登录名!');
+		alert.setHeader('aaa');
+
+		alert.addInput({
+			type: 'text',
+			name: 'username',
+			placeholder: '用户登录名',
+			value: ''
+		});
+
+		alert.addButton('取消');
+		alert.addButton({
+			text: '确认',
+			handler: (data: any) => {
+				// console.log('Radio data:', data);
+				console.log('500ms delayed prompt close');
+
+				// setTimeout(() => {
+				// 	console.log('Prompt close');
+				// 	alert.dismiss(data);
+				// }, 2000);
+				// 
+				this.toast();
+
+				// do not close the alert when this button is pressed
+				return false;
+
+				// this.testRadioOpen = false;
+				// this.testRadioResult = data;
+				// this.user.theClass = data;
+				// this.user.theClassDesc = classes.find(c => c.value == data).name;
+				// var newRoles = this.user.roles.split(',').filter(r => r.indexOf('class') < 0);
+				// newRoles.push(data);				
+				// this.user.roles = newRoles.join(',');
+				// this.save();
+			}
+		});
+		this.nav.present(alert);
+	}
+
+	toast() {
+		let toast = Toast.create({
+			message: 'User was added successfully',
+			duration: 3000,
+			position: 'middle'
+		});
+
+		toast.onDismiss(() => {
+			console.log('Dismissed toast');
+		});
+
+		this.nav.present(toast);
+	}
+
 
 	openLoginPage() {
 		this.nav.setRoot(LoginPage);
