@@ -17,16 +17,14 @@
         <ion-list-header>
             所有作业列表
         </ion-list-header>
-        <ion-item *ngFor="let item of summaries" (click)="itemTapped($event, item)">
-            <ion-icon [name]="item.icon" item-left></ion-icon>
-            {{item.title}}
-            <ion-icon [name]="item.star" danger></ion-icon>
-             <ion-icon name="create" (click)="openUrl(item)"></ion-icon>
-           <!--  <a  ion-item  *ngIf="isTeacher" class="item" href="#" onclick="window.open('homework/assigned.html?id=',  '_self', 'location=yes'); return false;">
-               
-            </a> -->
-            <!--  <ion-note item-right> 新 </ion-note>    -->
-            <ion-icon [name]="item.arrowForward" item-right></ion-icon>
-        </ion-item>
+        <div *ngFor="let item of summaries">
+            <ion-item *ngIf="isTeacher||item.isRelease" (click)="itemTapped($event, item)">
+                <ion-icon [name]="item.icon" item-left></ion-icon>
+                {{item.title}}
+                <ion-icon [name]="item.star" danger></ion-icon>
+                <ion-icon *ngIf="isTeacher" name="create" (click)="openUrl(item)"></ion-icon>
+                <ion-icon [name]="item.arrowForward" item-right></ion-icon>
+            </ion-item>
+        </div>
     </ion-list>
 </ion-content>

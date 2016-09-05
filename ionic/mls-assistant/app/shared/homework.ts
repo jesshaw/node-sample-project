@@ -8,6 +8,7 @@ export class Homework {
 	content: string;
 	createTime: Date;
 	updateTime: Date;
+	status:string;
 }
 
 export class HomeworkSummary {
@@ -16,4 +17,5 @@ export class HomeworkSummary {
 	icon: string;
 	star: string = '';
 	arrowForward:string='';
+	isRelease:boolean=false;
 }

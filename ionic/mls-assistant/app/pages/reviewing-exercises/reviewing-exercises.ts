@@ -24,29 +24,17 @@ export class ReviewingExercisesPage {
 
 	error: any;
 	summaries: Array<HomeworkSummary>;
+	isTeacher:boolean;
 
 	constructor(public nav: NavController, public homeworkSvc: HomeworkService) {
-
-
+		Util.getToken().then(t => this.authSuccess(t));
 	}
 
 	ngOnInit() {
-		this.homeworkSvc.getAllHomeworkSummariesByMap()
-			.then(summaries => this.summaries = summaries)
+		this.homeworkSvc.getReviewingExercisesSummaries()
+            .then(summaries => this.summaries = summaries)
 			.catch(error => this.error = error);
-	}
 
-	toSumries(datas) {
-		this.summaries = []
-		for (let i = 0; i < datas.length; i++) {
-			this.summaries.push({
-				id: datas[i].id,
-				title: datas[i].title,
-				icon: datas[i].icon,
-				star: datas[i].star,
-				arrowForward: datas[i].arrowForward
-			});
-		}
 	}
 
 	ngOnDestroy() {
@@ -58,6 +46,15 @@ export class ReviewingExercisesPage {
 				item: item
 			});
 		}
+	}
+
+	authSuccess(token) {
+		var roles: string = Util.getDecodeObject(token).roles
+		this.isTeacher = roles.indexOf('teacher') >= 0;
+	}
+
+	openUrl(item) {
+		window.open('homework/assigned.html?id=' + item.id, '_self', 'location=yes');
 	}
 
 }

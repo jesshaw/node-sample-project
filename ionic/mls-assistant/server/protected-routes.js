@@ -44,22 +44,21 @@ app.post('/api/homeworks/save', function(req, res) {
     console.log(req.body);
 
     Homework.findOne({ _id: req.body.id }, function(err, homework) {
-        if (!err) {
-            if (!homework) {
-                homework = new Homework();
-            }
-            homework.catgory = req.body.catgory;
-            homework.date = new Date(req.body.date);
-            homework.theClass = req.body.theClass;
-            homework.content = req.body.content;
-            homework.createTime = Date.now();
-            homework.updateTime = Date.now();
-            homework.status = req.body.status;
-            homework.save(function(err, homework) {
-                if (err) return console.error(err);
-                res.status(200).send(homework);
-            });
+        if (!homework) {
+            homework = new Homework();
         }
+        homework.catgory = req.body.catgory;
+        homework.date = new Date(req.body.date);
+        homework.theClass = req.body.theClass;
+        homework.content = req.body.content;
+        homework.createTime = Date.now();
+        homework.updateTime = Date.now();
+        homework.status = req.body.status;
+        homework.save(function(err, homework) {
+            if (err) return console.error(err);
+            res.status(200).send(homework);
+        });
+
     });
 
 });

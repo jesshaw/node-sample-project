@@ -52,7 +52,8 @@ export class HomeworkService {
 						item.title = homeworks[i].title;
 						item.icon = icons[Math.floor(Math.random() * icons.length)];
 						item.star = Util.showStar(homeworks[i].date);
-						item.arrowForward = 'arrow-forward'
+						item.arrowForward = 'arrow-forward';
+						item.isRelease=homeworks[i].status=='1';
 
 						if (catgory) {
 							if (catgory == homeworks[i].catgory) {
@@ -158,6 +159,7 @@ export class HomeworkService {
 								item.createTime = jsonArray[i].createTime;
 								item.updateTime = jsonArray[i].updateTime;
 								item.title = Util.getString(new Date(jsonArray[i].date)) + item.catgoryDesc
+								item.status=jsonArray[i].status;
 								homeworks.push(item);
 							}
 							// console.log(homeworks);
