@@ -190,32 +190,83 @@ app.post('/wx/createRandom', function(req, res) {
 
 app.post('/api/protected/user/saveSetting', function(req, res) {
 
-    // console.log(req.body);
-    var userScheme = getUserScheme(req);
-    if (!userScheme.username) {
-        return res.status(400).send("You must send the username");
+
+    switch (req.body.type) {
+        case 0:
+            User.findOne({ _id: req.body.user.id }, function(err, user) {
+                if (err)
+                    return console.error(err);
+                if (user) {
+                    user.roles = req.body.user.roles;
+                }
+                user.save(function(err, user) {
+                    if (err)
+                        return console.error(err);
+                });
+
+                res.status(201).send({
+                    id_token: createToken({
+                        username: user.username,
+                        roles: user.roles
+                    })
+                });
+            });
+            break;
+        case 1:
+            User.findOne({ _id: req.body.user.id }, function(err, user) {
+                if (err)
+                    return console.error(err);
+                if (user) {
+                    User.findOne({ username: req.body.user.username }, function(err, sameUser) {
+
+                        if (sameUser) {
+                            return res.status(400).send("用户名已被占用，再换换换");
+                        } else {
+                            user.username = req.body.user.username;
+                            console.log(user);
+                            user.save(function(err, user) {
+                                if (err)
+                                    return console.error(err);
+                                res.status(201).send({
+                                    id_token: createToken({
+                                        username: user.username,
+                                        roles: user.roles
+                                    })
+                                });
+                            });
+                        }
+                    })
+                }
+                return res.status(400).send("用户不存在");
+            });
+            break;
+        case 2:
+            User.findOne({ _id: req.body.user.id }, function(err, user) {
+                if (err)
+                    return console.error(err);
+                if (user) {
+                    if (!req.body.password) {
+                        return res.status(400).send("密码不能为空");
+                    };
+                    if (req.body.password != req.body.confirmPassword) {
+                        return res.status(400).send("密码与确认密码不一致");
+                    };
+                    user.password = req.body.password;
+                    user.save(function(err, user) {
+                        if (err)
+                            return console.error(err);
+                        res.status(201).send({
+                            id_token: createToken({
+                                username: user.username,
+                                roles: user.roles
+                            })
+                        });
+                    });
+                }
+                return res.status(400).send("用户不存在");
+            });
+            break;
+        default:
+            return res.status(400).send("用户不存在");
     }
-
-    User.findOne(userScheme.userSearch, function(err, user) {
-        if (err)
-            return console.error(err);
-
-        // console.dir(user);
-
-        if (user) {
-            user.roles = req.body.roles;
-        }
-
-        user.save(function(err, user) {
-            if (err)
-                return console.error(err);
-        });
-
-        res.status(201).send({
-            id_token: createToken({
-                username: user.username,
-                roles: user.roles
-            })
-        });
-    });
 });

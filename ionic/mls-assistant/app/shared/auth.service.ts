@@ -63,6 +63,7 @@ export class AuthService {
 						.subscribe(response => {
 							var json = response.json().user;
 							var u = new User();
+							u.id=json._id;
 							u.username = json.username;
 							u.password = json.password == '666666' ? ' 初始密码666666修改后显示*' : '******';
 							u.roles = json.roles;

@@ -36,14 +36,14 @@
         <ion-list-header>
             登陆信息
         </ion-list-header>
-        <ion-item>
+        <ion-item (click)="setLoginName()">
             <ion-icon name='person' item-left></ion-icon>
             用户名
             <ion-note item-right>
                 {{user.username}}
             </ion-note>
         </ion-item>
-        <ion-item>
+        <ion-item (click)="setPassword()">
             <ion-icon name='lock' item-left></ion-icon>
             密码
             <ion-note item-right>

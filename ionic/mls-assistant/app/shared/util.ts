@@ -6,8 +6,8 @@ import './rxjs-extensions';
 
 export class Util {
 
-    // static baseUrl="http://localhost:4001";
-    static baseUrl = "http://api.sanfor.com.cn";
+    static baseUrl="http://localhost:4001";
+    // static baseUrl = "http://api.sanfor.com.cn";
 
     static getAuthContentHeaders(): Promise<Headers> {
         return this.getToken()
