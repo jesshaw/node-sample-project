@@ -90,6 +90,7 @@ class MyApp {
 	authSuccess(token) {
 		this.error = null;
 		this.local.set('id_token', token);
+		localStorage.setItem('id_token', token);
 		var roles: string = Util.getDecodeObject(token).roles
 		this.isTeacher = roles.indexOf('teacher') >= 0;
 		if (roles.indexOf('class') >= 0) {

@@ -140,7 +140,7 @@ $(document).ready(function() {
                     el.id.val(data[0]._id);
 
                     el.catgory.val(data[0].catgory);
-                    el.date.val(data[0].date.substring(0,10));
+                    el.date.val(data[0].date.substring(0, 10));
                     // el.content.html(data[0].content);
                     CKEDITOR.instances.editor.setData(data[0].content);
                     el.theClass.val(data[0].theClass);
@@ -157,22 +157,48 @@ $(document).ready(function() {
     }
 
     function save(status) {
+        var reqBody = {
+            "id": el.id.val(),
+            "catgory": el.catgory.val(),
+            "date": el.date.val(),
+            "content": CKEDITOR.instances.editor.getData(),
+            "theClass": el.theClass.val(),
+            "status": status
+        };
+        // localStorage.setItem('favoriteflavor', 'vanilla');
+        var token = localStorage.getItem('id_token');
 
-        $.post(baseUrl + "/api/homeworks/save", {
-                "id": el.id.val(),
-                "catgory": el.catgory.val(),
-                "date": el.date.val(),
-                "content": CKEDITOR.instances.editor.getData(),
-                "theClass": el.theClass.val(),
-                "status": status
-            },
-            function(data) {
+        $.ajax({
+            url: baseUrl + "/api/protected/homeworks/save",
+            type: 'post',
+            data: reqBody,
+            headers: { "authorization": 'Bearer ' + token },
+            dataType: 'json',
+            success: function(data) {
                 if (data._id) {
                     location.href = "/";
                 } else {
                     alert('操作失败');
                 }
-            }, "json");
+            }
+        });
+
+        // $.post(baseUrl + "/api/homeworks/save", {
+        //         "id": el.id.val(),
+        //         "catgory": el.catgory.val(),
+        //         "date": el.date.val(),
+        //         "content": CKEDITOR.instances.editor.getData(),
+        //         "theClass": el.theClass.val(),
+        //         "status": status
+        //     },
+        //     function(data) {
+        //         if (data._id) {
+        //             location.href = "/";
+        //         } else {
+        //             alert('操作失败');
+        //         }
+        //     }, "json");
+
         // alert(el.content.html());
     }
 
