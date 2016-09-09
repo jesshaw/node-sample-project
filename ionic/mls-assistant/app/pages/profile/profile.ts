@@ -97,7 +97,7 @@ export class ProfilePage implements OnInit, OnDestroy {
 				var newRoles = this.user.roles.split(',').filter(r => r.indexOf('class') < 0);
 				newRoles.push(data);
 				this.user.roles = newRoles.join(',');
-				this.auth.saveSettings({type:0,user:this.user})
+				this.auth.saveSettings({ type: 0, user: this.user })
 					.then(data => this.authSuccess(data.id_token))
 					.catch(error => this.error = error);
 				if (this.error) {
@@ -133,9 +133,11 @@ export class ProfilePage implements OnInit, OnDestroy {
 				// }, 2000);
 
 				this.user.username = data.username;
-				this.auth.saveSettings({type:1,user:this.user})
+				this.auth.saveSettings({ type: 1, user: this.user })
 					.then(data => this.authSuccess(data.id_token))
-					.catch(error => this.error = error);
+					.catch(error => {
+					this.error = error;
+					});
 				if (this.error) {
 					this.toast(this.error);
 					return false;
@@ -174,10 +176,12 @@ export class ProfilePage implements OnInit, OnDestroy {
 				// 	alert.dismiss(data);
 				// }, 2000);
 
-				
-				this.auth.saveSettings({type:2,user:this.user})
+
+				this.auth.saveSettings({ type: 2, user: this.user })
 					.then(data => this.authSuccess(data.id_token))
-					.catch(error => this.error = error);
+					.catch(error => {
+					this.error = error;
+					});
 				if (this.error) {
 					this.toast(this.error);
 					return false;

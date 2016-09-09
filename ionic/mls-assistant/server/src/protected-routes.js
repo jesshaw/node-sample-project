@@ -42,26 +42,26 @@ app.get('/api/homework', function(req, res) {
 
 
 
-// app.post('/api/homeworks/save', function(req, res) {
-//     console.log(req.body);
+app.post('/api/homeworks/save', function(req, res) {
+    console.log(req.body);
 
-//     Homework.findOne({ _id: req.body.id }, function(err, homework) {
-//         if (!homework) {
-//             homework = new Homework();
-//         }
-//         homework.catgory = req.body.catgory;
-//         homework.date = new Date(req.body.date);
-//         homework.theClass = req.body.theClass;
-//         homework.content = req.body.content;
-//         homework.createTime = Date.now();
-//         homework.updateTime = Date.now();
-//         homework.status = req.body.status;
-//         homework.save(function(err, homework) {
-//             if (err) return console.error(err);
-//             res.status(200).send(homework);
-//         });
-//     });
-// });
+    Homework.findOne({ _id: req.body.id }, function(err, homework) {
+        if (!homework) {
+            homework = new Homework();
+        }
+        homework.catgory = req.body.catgory;
+        homework.date = new Date(req.body.date);
+        homework.theClass = req.body.theClass;
+        homework.content = req.body.content;
+        homework.createTime = Date.now();
+        homework.updateTime = Date.now();
+        homework.status = req.body.status;
+        homework.save(function(err, homework) {
+            if (err) return console.error(err);
+            res.status(200).send(homework);
+        });
+    });
+});
 
 app.post('/api/protected/homeworks/save', function(req, res) {
     console.log(req.body);

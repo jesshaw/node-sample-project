@@ -6,6 +6,8 @@ var logger          = require('morgan'),
     cors            = require('cors'),
     dotenv          = require('dotenv'),
     bodyParser      = require('body-parser'),
+    config          = require('./config'),
+    jwt             = require('express-jwt'),
     mongoose        = require('mongoose');
 
 var app = express();
@@ -35,9 +37,17 @@ if (process.env.NODE_ENV === 'development') {
   app.use(errorhandler());
 }
 
-app.use(require('./anonymous-routes'));
-app.use(require('./protected-routes'));
-app.use(require('./user-routes'));
+var jwtCheck = jwt({
+    secret: config.secret
+}).unless({path: '/api/users/login'});
+
+app.use('/api', jwtCheck);
+
+// app.use(require('./anonymous-routes'));
+app.use('/api/homeworks',require('./homeworks'));
+app.use('/api/users',require('./users'));
+// app.use(require('./protected-routes'));
+// app.use(require('./user-routes'));
 
 var port = process.env.PORT || 4001;
 
