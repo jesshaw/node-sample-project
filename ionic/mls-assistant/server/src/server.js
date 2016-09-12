@@ -39,7 +39,7 @@ if (process.env.NODE_ENV === 'development') {
 
 var jwtCheck = jwt({
     secret: config.secret
-}).unless({path: '/api/users/login'});
+}).unless({path: ['/api/users/login','/api/users/r','/api/users/create']});
 
 app.use('/api', jwtCheck);
 

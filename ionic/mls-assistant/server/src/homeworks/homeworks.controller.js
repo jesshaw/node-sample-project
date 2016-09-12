@@ -1,7 +1,15 @@
 var Homework = require('./homework.js');
 
 exports.index = function(req, res) {
-    Homework.find({ theClass: req.query.theClass }, null, { sort: { date: -1 } }, function(err, homeworks) {
+    var classes = req.user.roles.split(',');
+    // console.log(classes);
+    var query = Homework.find({});
+    query.where('theClass').in(classes);
+    // query.limit(1);
+    // query.skip(100);
+    query.sort({ date: -1 });
+
+    query.exec(function(err, homeworks) {
         if (err)
             res.send(err);
         res.send(homeworks);
@@ -24,8 +32,17 @@ exports.create = function(req, res) {
     });
 };
 
+
+exports.getsByClass = function(req, res) {
+    Homework.find({ theClass: req.query.theClass }, null, { sort: { date: -1 } }, function(err, homeworks) {
+        if (err)
+            res.send(err);
+        res.send(homeworks);
+    });
+};
+
 exports.getById = function(req, res) {
-   console.log(req.user);
+    console.log(req.user);
     Homework.findById(req.params.id, function(err, homework) {
         if (err)
             res.send(err);
