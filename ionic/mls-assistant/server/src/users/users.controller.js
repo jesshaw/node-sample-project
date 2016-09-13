@@ -86,12 +86,13 @@ exports.getById = function(req, res) {
     });
 };
 
+
 exports.getByUsername = function(req, res) {
     // console.log(req.query);
-    if (!req.query.username) {
-        return res.status(400).send({ message: "You must send the username" });
-    }
-    User.findOne({ username: req.query.username }, function(err, user) {
+    // if (!req.query.username) {
+    //     return res.status(400).send({ message: "You must send the username" });
+    // }
+    User.findOne({ username: req.user.username }, function(err, user) {
         if (err)
             return res.status(400).send(err);
         res.status(201).send({

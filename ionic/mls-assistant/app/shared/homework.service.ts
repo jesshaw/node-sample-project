@@ -10,7 +10,9 @@ import {Util} from './util';
 @Injectable()
 export class HomeworkService {
 
-	homeworksUrl: string = Util.baseUrl + "/api/protected/homeworks";
+	// homeworksUrl: string = Util.baseUrl + "/api/protected/homeworks";
+	// homeworksUrlTest: string = Util.baseUrl + "/api/homeworks";
+	homeworksUrl: string = Util.baseUrl + "/api/homeworks";
 	homeworksUrlTest: string = Util.baseUrl + "/api/homeworks";
 
 
@@ -53,7 +55,7 @@ export class HomeworkService {
 						item.icon = icons[Math.floor(Math.random() * icons.length)];
 						item.star = Util.showStar(homeworks[i].date);
 						item.arrowForward = 'arrow-forward';
-						item.isRelease=homeworks[i].status=='1';
+						item.isRelease = homeworks[i].status == '1';
 
 						if (catgory) {
 							if (catgory == homeworks[i].catgory) {
@@ -90,8 +92,8 @@ export class HomeworkService {
 
 		return new Promise<Array<HomeworkSummary>>(resolve => {
 			let params: URLSearchParams = new URLSearchParams();
-					params.set('theClass', 'class1');
-			this.autHttp.get(this.homeworksUrl,{search:params})
+			params.set('theClass', 'class1');
+			this.autHttp.get(this.homeworksUrl, { search: params })
 				.map(res => {
 					console.log(res.json());
 					var homeworks: Array<Homework> = [];
@@ -134,40 +136,65 @@ export class HomeworkService {
 
 		return new Promise<Array<Homework>>(resolve =>
 
-			Util.getCurrentClass()
-				.then(c => {
-					let params: URLSearchParams = new URLSearchParams();
-					params.set('theClass', c);
-					return params;
-				})
-				.then(params => {
-					var headers={ headers:Util.getContentHeaders(), search: params };
+			this.autHttp.get(this.homeworksUrl, { headers: Util.getContentHeaders() })
+				.map(res => res.json())
+				.subscribe(bodyJson => {
+					var homeworks = [];
+					var jsonArray = bodyJson;
+					for (var i = 0; i < jsonArray.length; ++i) {
+						var item = new Homework();
+						item.id = jsonArray[i]._id;
+						item.catgory = jsonArray[i].catgory;
+						item.catgoryDesc = this.getTitle(jsonArray[i].catgory);
+						item.theClass = jsonArray[i].theClass;
+						item.content = jsonArray[i].content;
+						item.date = new Date(jsonArray[i].date);
+						item.createTime = jsonArray[i].createTime;
+						item.updateTime = jsonArray[i].updateTime;
+						item.title = Util.getString(new Date(jsonArray[i].date)) + item.catgoryDesc
+						item.status = jsonArray[i].status;
+						homeworks.push(item);
+					}
+					// console.log(homeworks);
 
-					this.autHttp.get(this.homeworksUrl, headers)
-						.map(res => res.json())
-						.subscribe(bodyJson => {
-							var homeworks = [];
-							var jsonArray = bodyJson;
-							for (var i = 0; i < jsonArray.length; ++i) {
-								var item = new Homework();
-								item.id = jsonArray[i]._id;
-								item.catgory = jsonArray[i].catgory;
-								item.catgoryDesc = this.getTitle(jsonArray[i].catgory);
-								item.theClass = jsonArray[i].theClass;
-								item.content = jsonArray[i].content;
-								item.date = new Date(jsonArray[i].date);
-								item.createTime = jsonArray[i].createTime;
-								item.updateTime = jsonArray[i].updateTime;
-								item.title = Util.getString(new Date(jsonArray[i].date)) + item.catgoryDesc
-								item.status=jsonArray[i].status;
-								homeworks.push(item);
-							}
-							// console.log(homeworks);
-
-							resolve(homeworks);
-						});
+					resolve(homeworks);
 				})
 		);
+
+		// Util.getCurrentClass()
+		// 	.then(c => {
+		// 		let params: URLSearchParams = new URLSearchParams();
+		// 		params.set('theClass', c);
+		// 		return params;
+		// 	})
+		// 	.then(params => {
+		// 		var headers={ headers:Util.getContentHeaders(), search: params };
+
+		// 		this.autHttp.get(this.homeworksUrl, headers)
+		// 			.map(res => res.json())
+		// 			.subscribe(bodyJson => {
+		// 				var homeworks = [];
+		// 				var jsonArray = bodyJson;
+		// 				for (var i = 0; i < jsonArray.length; ++i) {
+		// 					var item = new Homework();
+		// 					item.id = jsonArray[i]._id;
+		// 					item.catgory = jsonArray[i].catgory;
+		// 					item.catgoryDesc = this.getTitle(jsonArray[i].catgory);
+		// 					item.theClass = jsonArray[i].theClass;
+		// 					item.content = jsonArray[i].content;
+		// 					item.date = new Date(jsonArray[i].date);
+		// 					item.createTime = jsonArray[i].createTime;
+		// 					item.updateTime = jsonArray[i].updateTime;
+		// 					item.title = Util.getString(new Date(jsonArray[i].date)) + item.catgoryDesc
+		// 					item.status=jsonArray[i].status;
+		// 					homeworks.push(item);
+		// 				}
+		// 				// console.log(homeworks);
+
+		// 				resolve(homeworks);
+		// 			});
+		// 	})
+		// );
 	}
 
 

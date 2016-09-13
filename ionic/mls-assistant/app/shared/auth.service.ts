@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Headers, URLSearchParams} from '@angular/http';
 import { NavController, Storage, LocalStorage } from 'ionic-angular';
-import {JwtHelper, tokenNotExpired} from 'angular2-jwt';
+import {JwtHelper, tokenNotExpired, AuthHttp} from 'angular2-jwt';
 
 
 import {Util} from './util';
@@ -16,14 +16,18 @@ import './rxjs-extensions';
 @Injectable()
 export class AuthService {
 
-	LOGIN_URL: string = Util.baseUrl + "/sessions/create";
-	SIGNUP_URL: string = Util.baseUrl + "/users";
-	USERSETTING_URL: string = Util.baseUrl + "/api/protected/user/saveSetting";
-	GETUSER_URL: string = Util.baseUrl + "/api/protected/user";
+	// LOGIN_URL: string = Util.baseUrl + "/sessions/create";
+	// SIGNUP_URL: string = Util.baseUrl + "/users";
+	// USERSETTING_URL: string = Util.baseUrl + "/api/protected/user/saveSetting";
+	// GETUSER_URL: string = Util.baseUrl + "/api/protected/user";
+	LOGIN_URL: string = Util.baseUrl + "/api/users/login";
+	SIGNUP_URL: string = Util.baseUrl + "/api/users/create";
+	USERSETTING_URL: string = Util.baseUrl + "/api/users/roles";
+	GETUSER_URL: string = Util.baseUrl + "/api/users/detail";
 
 	contentHeader: Headers = new Headers({ "Content-Type": "application/json" });
 
-	constructor(private http: Http) { }
+	constructor(private http: Http, private autHttp: AuthHttp) { }
 
 	public login(credentials) {
 		return this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
@@ -34,7 +38,8 @@ export class AuthService {
 	}
 
 	public authenticated() {
-		return tokenNotExpired();
+		// return false;
+		// return tokenNotExpired();
 	}
 
 	public saveSettings(settings) {
@@ -57,25 +62,41 @@ export class AuthService {
 		params.set('username', username);
 
 		return new Promise<User>(resolve => {
-			Util.getAuthContentHeaders()
-				.then(contentHeaders => {
-					this.http.get(this.GETUSER_URL, { headers: contentHeaders, search: params })
-						.subscribe(response => {
-							var json = response.json().user;
-							var u = new User();
-							u.id=json._id;
-							u.username = json.username;
-							u.password = json.password == '666666' ? ' 初始密码666666修改后显示*' : '******';
-							u.roles = json.roles;
-							u.rolesArray = json.roles.split(',');
-							u.wxUsername = json.wxUsername;
-							u.isBindWx = json.wxUsername ? true : false;
-							var theClass = u.rolesArray.find(r => r.indexOf('class') >= 0);
-							u.theClass = theClass
-							u.theClassDesc = theClass ? Classes.getClasses().find(c => c.value == u.theClass).name : '选班后可查看作业';
-							resolve(u);
-						})
-				});
+			this.autHttp.get(this.GETUSER_URL, { headers: this.contentHeader })
+				.subscribe(response => {
+					var json = response.json().user;
+					var u = new User();
+					u.id = json._id;
+					u.username = json.username;
+					u.password = json.password == '666666' ? ' 初始密码666666修改后显示*' : '******';
+					u.roles = json.roles;
+					u.rolesArray = json.roles.split(',');
+					u.wxUsername = json.wxUsername;
+					u.isBindWx = json.wxUsername ? true : false;
+					var theClass = u.rolesArray.find(r => r.indexOf('class') >= 0);
+					u.theClass = theClass
+					u.theClassDesc = theClass ? Classes.getClasses().find(c => c.value == u.theClass).name : '选班后可查看作业';
+					resolve(u);
+				})
+			// Util.getAuthContentHeaders()
+			// 	.then(contentHeaders => {
+			// 		this.http.get(this.GETUSER_URL, { headers: contentHeaders, search: params })
+			// 			.subscribe(response => {
+			// 				var json = response.json().user;
+			// 				var u = new User();
+			// 				u.id=json._id;
+			// 				u.username = json.username;
+			// 				u.password = json.password == '666666' ? ' 初始密码666666修改后显示*' : '******';
+			// 				u.roles = json.roles;
+			// 				u.rolesArray = json.roles.split(',');
+			// 				u.wxUsername = json.wxUsername;
+			// 				u.isBindWx = json.wxUsername ? true : false;
+			// 				var theClass = u.rolesArray.find(r => r.indexOf('class') >= 0);
+			// 				u.theClass = theClass
+			// 				u.theClassDesc = theClass ? Classes.getClasses().find(c => c.value == u.theClass).name : '选班后可查看作业';
+			// 				resolve(u);
+			// 			})
+			// 	});
 		});
 	}
 

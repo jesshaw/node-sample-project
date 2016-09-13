@@ -15,7 +15,7 @@
 <ion-content padding>
     <ion-list no-border>
         <ion-list-header>
-            所有作业列表
+            所有作业列表{{isTeacher}}
         </ion-list-header>
         <div *ngFor="let item of summaries">
             <ion-item *ngIf="isTeacher||item.isRelease" (click)="itemTapped($event, item)">

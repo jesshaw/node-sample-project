@@ -5,9 +5,10 @@ var express = require('express');
 
 var router = module.exports = express.Router();
 router.get('/', controller.getsByClass); //query list
-router.route('/:id') 
-    .get(controller.getById) //query detail
+router.get('/detail',controller.getByUsername) //query detail
     // .put(controller.update) //update detail
+    .delete(controller.deleteById); //delete detail
+router.route('/:id') 
     .delete(controller.deleteById); //delete detail
 router.put('/roles',controller.updateRoles); // update 
 router.put('/username',controller.updateUsername); // update 

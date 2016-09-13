@@ -21,16 +21,20 @@ import '../../shared/rxjs-extensions';
 })
 export class HomeworksPage implements OnInit, OnDestroy {
 	error: any;
-	summaries: HomeworkSummary[] = [];
+	summaries: HomeworkSummary[];
 	isTeacher: boolean;
 
 	constructor(public nav: NavController, private homeworkSvc: HomeworkService) {
 		Util.getToken().then(t => this.authSuccess(t));
+		this.summaries=[];
 	}
 
 	ngOnInit() {
 		this.homeworkSvc.getAllHomeworkSummaries()
-            .then(summaries => this.summaries = summaries)
+            .then(summaries => {
+				console.log(summaries);
+				this.summaries = summaries;
+            })
 			.catch(error => this.error = error);
 	}
 
