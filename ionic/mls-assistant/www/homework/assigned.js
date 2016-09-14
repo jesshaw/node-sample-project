@@ -52,9 +52,9 @@ var initSample = (function() {
 })();
 
 $(document).ready(function() {
-    var baseUrl = "http://api.sanfor.com.cn";
-    // var baseUrl = "http://localhost:4001";
-    // 
+    // var baseUrl = "http://api.sanfor.com.cn";
+    var baseUrl = "http://localhost:4001";
+
     var el = {
         id: $('#id'),
         date: $('#date'),
@@ -132,22 +132,41 @@ $(document).ready(function() {
     });
 
     function load() {
+        var token = localStorage.getItem('id_token');
         var id = getParameterByName("id");
         if (id) {
-            $.get(baseUrl + "/api/homework?id=" + id, function(data) {
-                // alert(data);
-                if (data && data.length > 0) {
-                    el.id.val(data[0]._id);
+            $.ajax({
+                url: baseUrl + "/api/homeworks/" + id,
+                type: 'get',
+                headers: { "authorization": 'Bearer ' + token },
+                dataType: 'json',
+                success: function(data) {
+                    if (data) {
+                        el.id.val(data._id);
 
-                    el.catgory.val(data[0].catgory);
-                    el.date.val(data[0].date.substring(0, 10));
-                    // el.content.html(data[0].content);
-                    CKEDITOR.instances.editor.setData(data[0].content);
-                    el.theClass.val(data[0].theClass);
+                        el.catgory.val(data.catgory);
+                        el.date.val(data.date.substring(0, 10));
+                        // el.content.html(data[0].content);
+                        CKEDITOR.instances.editor.setData(data.content);
+                        el.theClass.val(data.theClass);
 
+                    }
                 }
-
             });
+            // $.get(baseUrl + "/api/homeworks/" + id, function(data) {
+            //     // alert(data);
+            //     if (data && data.length > 0) {
+            //         el.id.val(data[0]._id);
+
+            //         el.catgory.val(data[0].catgory);
+            //         el.date.val(data[0].date.substring(0, 10));
+            //         // el.content.html(data[0].content);
+            //         CKEDITOR.instances.editor.setData(data[0].content);
+            //         el.theClass.val(data[0].theClass);
+
+            //     }
+
+            // });
         }
 
         if (!el.date.val()) {
@@ -167,10 +186,12 @@ $(document).ready(function() {
         };
         // localStorage.setItem('favoriteflavor', 'vanilla');
         var token = localStorage.getItem('id_token');
+        var type = el.id.val() ? 'put' : 'post';
+        var subUrl = el.id.val() ? '/api/homeworks/' + el.id.val() : '/api/homeworks';
 
         $.ajax({
-            url: baseUrl + "/api/protected/homeworks/save",
-            type: 'post',
+            url: baseUrl + subUrl,
+            type: type,
             data: reqBody,
             headers: { "authorization": 'Bearer ' + token },
             dataType: 'json',

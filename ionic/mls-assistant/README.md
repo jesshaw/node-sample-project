@@ -4,6 +4,8 @@ This is a simple developer preview of an Ionic 2 starter project, the next gener
 
 Ionic 2 is based on the new [2.x version of AngularJS](https://angular.io/), and comes with many significant performance, usability, and feature improvements.
 
+## delete all js files of currently dir
+$ find . -name "*.js" -delete
 
 ## Getting Started
 

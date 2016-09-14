@@ -16,21 +16,23 @@ import './rxjs-extensions';
 @Injectable()
 export class AuthService {
 
-	// LOGIN_URL: string = Util.baseUrl + "/sessions/create";
-	// SIGNUP_URL: string = Util.baseUrl + "/users";
-	// USERSETTING_URL: string = Util.baseUrl + "/api/protected/user/saveSetting";
-	// GETUSER_URL: string = Util.baseUrl + "/api/protected/user";
-	LOGIN_URL: string = Util.baseUrl + "/api/users/login";
-	SIGNUP_URL: string = Util.baseUrl + "/api/users/create";
-	USERSETTING_URL: string = Util.baseUrl + "/api/users/roles";
-	GETUSER_URL: string = Util.baseUrl + "/api/users/detail";
+	// loginUrl: string = Util.baseUrl + "/sessions/create";
+	// registerNewUserUrl: string = Util.baseUrl + "/users";
+	// settingRolesUrl: string = Util.baseUrl + "/api/protected/user/saveSetting";
+	// userDetailUrl: string = Util.baseUrl + "/api/protected/user";
+	loginUrl: string = Util.baseUrl + "/api/users/login";
+	registerNewUserUrl: string = Util.baseUrl + "/api/users/create";
+	settingRolesUrl: string = Util.baseUrl + "/api/users/roles";
+	resetPasswordUrl: string = Util.baseUrl + "/api/users/password";
+	modifyLoginNameUrl: string = Util.baseUrl + "/api/users/username";
+	userDetailUrl: string = Util.baseUrl + "/api/users/detail";
 
 	contentHeader: Headers = new Headers({ "Content-Type": "application/json" });
 
 	constructor(private http: Http, private autHttp: AuthHttp) { }
 
 	public login(credentials) {
-		return this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
+		return this.http.post(this.loginUrl, JSON.stringify(credentials), { headers: this.contentHeader })
 			.map(res => {
 				console.log(res);
 				return res.json()
@@ -38,31 +40,42 @@ export class AuthService {
 	}
 
 	public authenticated() {
-		// return false;
-		// return tokenNotExpired();
+		return tokenNotExpired();
 	}
 
-	public saveSettings(settings) {
+	public settingRoles(settings) {
 		return new Promise<any>(resolve => {
-			Util.getAuthContentHeaders()
-				.then(contentHeaders => {
-					this.http.post(this.USERSETTING_URL, JSON.stringify(settings), { headers: contentHeaders })
-						.subscribe(response => {
-							console.log(response.json());
-							resolve(response.json());
-						})
+			this.autHttp.put(this.settingRolesUrl, JSON.stringify(settings), { headers: this.contentHeader })
+				.subscribe(response => {
+					console.log(response.json());
+					resolve(response.json());
+				});
+		});
+	}
+
+	public resetPassword(settings) {
+		return new Promise<any>(resolve => {
+			this.autHttp.put(this.resetPasswordUrl, JSON.stringify(settings), { headers: this.contentHeader })
+				.subscribe(response => {
+					console.log(response.json());
+					resolve(response.json());
+				});
+		});
+	}
+
+	public modifyLoginName(settings) {
+		return new Promise<any>(resolve => {
+			this.autHttp.put(this.modifyLoginNameUrl, JSON.stringify(settings), { headers: this.contentHeader })
+				.subscribe(response => {
+					console.log(response.json());
+					resolve(response.json());
 				});
 		});
 	}
 
 	public getUser(username): Promise<User> {
-
-
-		let params: URLSearchParams = new URLSearchParams();
-		params.set('username', username);
-
 		return new Promise<User>(resolve => {
-			this.autHttp.get(this.GETUSER_URL, { headers: this.contentHeader })
+			this.autHttp.get(this.userDetailUrl, { headers: this.contentHeader })
 				.subscribe(response => {
 					var json = response.json().user;
 					var u = new User();
@@ -80,7 +93,7 @@ export class AuthService {
 				})
 			// Util.getAuthContentHeaders()
 			// 	.then(contentHeaders => {
-			// 		this.http.get(this.GETUSER_URL, { headers: contentHeaders, search: params })
+			// 		this.http.get(this.userDetailUrl, { headers: contentHeaders, search: params })
 			// 			.subscribe(response => {
 			// 				var json = response.json().user;
 			// 				var u = new User();
@@ -114,7 +127,7 @@ export class AuthService {
 	// //curl --data "username=gonto&password=gonto" http://localhost:3001/sessions/create
 
 	// login(credentials) {
-	// 	this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
+	// 	this.http.post(this.loginUrl, JSON.stringify(credentials), { headers: this.contentHeader })
 	// 		.map(res => res.json())
 	// 		.subscribe(
 	// 		data => this.authSuccess(data.id_token),
@@ -125,7 +138,7 @@ export class AuthService {
 	// }
 
 	// signup(credentials) {
-	// 	this.http.post(this.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
+	// 	this.http.post(this.registerNewUserUrl, JSON.stringify(credentials), { headers: this.contentHeader })
 	// 		.map(res => res.json())
 	// 		.subscribe(
 	// 		data => this.authSuccess(data.id_token),

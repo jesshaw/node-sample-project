@@ -1,6 +1,6 @@
 import { Component, ViewChild, provide } from '@angular/core';
 import {Http, HTTP_PROVIDERS, URLSearchParams} from '@angular/http';
-import {AuthHttp, AuthConfig,AUTH_PROVIDERS} from 'angular2-jwt';
+import {AuthHttp, AuthConfig, AUTH_PROVIDERS} from 'angular2-jwt';
 
 import { ionicBootstrap, Platform, Nav, Storage, LocalStorage } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
@@ -23,13 +23,7 @@ import './shared/rxjs-extensions';
 
 @Component({
 	templateUrl: 'build/app.html',
-	providers: [AuthService, HomeworkService,
-	provide(AuthHttp, {
-		useFactory: (http) => {
-			return new AuthHttp(new AuthConfig(), http);
-		},
-		deps: [Http]
-	})]
+	providers: [AuthService, HomeworkService]
 })
 class MyApp {
 	@ViewChild(Nav) nav: Nav;
@@ -109,7 +103,13 @@ class MyApp {
 
 ionicBootstrap(MyApp, [
     HTTP_PROVIDERS,
-	AUTH_PROVIDERS
+	AUTH_PROVIDERS,
+	provide(AuthHttp, {
+		useFactory: (http) => {
+			return new AuthHttp(new AuthConfig(), http);
+		},
+		deps: [Http]
+	})
     // ,	{ provide: XHRBackend, useClass: InMemoryBackendService }, // in-mem server
     // { provide: SEED_DATA, useClass: InMemoryDataService }      // in-mem server data]
 ]);

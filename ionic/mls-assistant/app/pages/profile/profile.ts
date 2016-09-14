@@ -97,7 +97,7 @@ export class ProfilePage implements OnInit, OnDestroy {
 				var newRoles = this.user.roles.split(',').filter(r => r.indexOf('class') < 0);
 				newRoles.push(data);
 				this.user.roles = newRoles.join(',');
-				this.auth.saveSettings({ type: 0, user: this.user })
+				this.auth.settingRoles({ roles: this.user.roles })
 					.then(data => this.authSuccess(data.id_token))
 					.catch(error => this.error = error);
 				if (this.error) {
@@ -133,10 +133,10 @@ export class ProfilePage implements OnInit, OnDestroy {
 				// }, 2000);
 
 				this.user.username = data.username;
-				this.auth.saveSettings({ type: 1, user: this.user })
+				this.auth.modifyLoginName({ username: this.user.username })
 					.then(data => this.authSuccess(data.id_token))
 					.catch(error => {
-					this.error = error;
+						this.error = error;
 					});
 				if (this.error) {
 					this.toast(this.error);
@@ -154,13 +154,20 @@ export class ProfilePage implements OnInit, OnDestroy {
 		alert.addInput({
 			type: 'text',
 			name: 'password',
-			placeholder: '用户登录名',
+			placeholder: '原密码',
 			value: ''
 		});
 		alert.addInput({
 			type: 'text',
-			name: 'confirmPassword',
-			placeholder: '用户登录名',
+			name: 'newPassword',
+			placeholder: '新密码',
+			value: ''
+		});
+
+		alert.addInput({
+			type: 'text',
+			name: 'newConfirmPassword',
+			placeholder: '再输一次新密码',
 			value: ''
 		});
 
@@ -177,10 +184,10 @@ export class ProfilePage implements OnInit, OnDestroy {
 				// }, 2000);
 
 
-				this.auth.saveSettings({ type: 2, user: this.user })
+				this.auth.resetPassword({ password: data.password, newPassword: data.newPassword, newConfirmPassword: data.newConfirmPassword })
 					.then(data => this.authSuccess(data.id_token))
 					.catch(error => {
-					this.error = error;
+						this.error = error;
 					});
 				if (this.error) {
 					this.toast(this.error);
