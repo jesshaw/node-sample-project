@@ -1,23 +1,26 @@
 const express = require('express');
 const app = express();
-const fs = require("fs");
+const router = express.Router();
+
+const path = require("path");
 
 
+// app.use(express.static(path.join(__dirname, 'public')));
 
 // This responds with "Hello World" on the homepage
 app.get('/', function (req, res) {
     console.log("Got a GET request for the homepage");
-    // res.send('Hello GET');
+    res.send('Hello GET');
 
 
-// Asynchronous read
-    fs.readFile('app/baidu.html', function (err, data) {
-        if (err) {
-            return console.error(err);
-        }
-        console.log("Asynchronous read: " + data.toString());
-        res.send(data.toString());
-    });
+// // Asynchronous read
+//     fs.readFile('app/baidu.html', function (err, data) {
+//         if (err) {
+//             return console.error(err);
+//         }
+//         console.log("Asynchronous read: " + data.toString());
+//         res.send(data.toString());
+//     });
 
 // // Synchronous read
 //     var data = fs.readFileSync('input.txt');
@@ -49,7 +52,7 @@ app.get('/ab*cd', function (req, res) {
 });
 
 var server = app.listen(8888, function () {
-    var host = server.address().address
+    var host = server.address().address && "localhost"
     var port = server.address().port
 
     console.log("baidu app listening at http://%s:%s", host, port)
