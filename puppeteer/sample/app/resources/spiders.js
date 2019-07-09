@@ -15,9 +15,13 @@ router.get('/', function (req, res) {
 
     const url = req.params.url || 'https://codemart.com/projects';
     var repeatSelector = req.params.r || '#container > div > div > div > div > div > div.left-container-1dwXK > div.list-container--j7Ng > div > div > div:nth-child(2)';
-    var selector = req.params.s || '#container > div > div > div > div > div > div.left-container-1dwXK > div.list-container--j7Ng > div > div > div:nth-child(3) > div > div.body-content-2y6ks > div > div.title-2q5sH > a';
-
+    var selector = req.params.s || '#container > div > div > div > div > div > div.left-container-1dwXK > div.list-container--j7Ng > div > div > div:nth-child(2) > div > div.body-content-2y6ks > div > div.title-2q5sH > a';
+    selector = selector.replace(repeatSelector, '');
+    var index = selector.indexOf('>') + 1;
+    selector = selector.substr(index);
+    console.log(selector);
     repeatSelector = repeatSelector.substr(0, repeatSelector.lastIndexOf(":"));
+
 
     try {
         (async () => {
@@ -26,21 +30,15 @@ router.get('/', function (req, res) {
             // await page.setViewport({ width: 1280, height: 800 })
             await page.goto(url);
 
-            console.log(repeatSelector);
-            const namesHandle = await page.$$(repeatSelector); //1个$返回对象，2个$返回数组对象
+            const list = await page.$$eval(repeatSelector, (nodes, s) => nodes.map(n => {
+                return n.querySelector(s).innerText;
+            }).slice(0, 3), selector);
 
-            const names = await namesHandle.map(h=>h.$$eval('a', nodes => nodes.map(n => n.innerText)));
-
-            // // console.log(namesHandle.html());
-            // const  names=await namesHandle.$$('span', anchors => {
-            //     return anchors.map(anchor => anchor.innerText).slice(0, 10);
-            // });
-
-            console.log(names);
+            console.log(list);
 
             await browser.close();
 
-            res.send(names);
+            res.send(list);
 
         })()
     } catch (err) {
