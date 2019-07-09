@@ -6,7 +6,7 @@ const path = require("path");
 const birds = require('./resources/birds');
 const spiders = require('./resources/spiders');
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/birds', birds);
 app.use('/spiders', spiders);
 
