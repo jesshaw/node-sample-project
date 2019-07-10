@@ -16,40 +16,34 @@
 //   OTHER = 'OTHER'
 // }
 
+export interface IField {
+    key?: string;
+    value?: string;
+    keyDesc?: string;
+}
+
+export class Field implements IField {
+    constructor(
+        key?: string,
+        value?: string,
+        keyDesc?: string,
+    ) {
+    }
+}
+
 export interface ISpider {
-  id?: number;
-  // placedTime?: Date;
-  // status?: OrderStatus;
-  code?: string;
-  // deliveredTime?: Date;
-  // channel?: Channel;
-  // amount?: number;
-  // shippingCharge?: number;
-  // deductionAmount?: number;
-  // payAmount?: number;
-  // orderItems?: IOrderItem[];
-  // promotion?: IPromotion;
-  // store?: IStore;
-  // staff?: IStaff;
-  // customer?: ICustomer;
+    url?: string;
+    format?: string;
+    repeat?: string;
+    fields?: IField[];
 }
 
 export class Spider implements ISpider {
-  constructor(
-    public id?: number,
-    // public placedTime?: Date,
-    // public status?: OrderStatus,
-    public code?: string,
-    // public deliveredTime?: Date,
-    // public channel?: Channel,
-    // public amount?: number,
-    // public shippingCharge?: number,
-    // public deductionAmount?: number,
-    // public payAmount?: number,
-    // public orderItems?: IOrderItem[],
-    // public promotion?: IPromotion,
-    // public store?: IStore,
-    // public staff?: IStaff,
-    // public customer?: ICustomer
-  ) {}
+    constructor(
+        url?: string,
+        format?: string,
+        repeat?: string,
+        fields?: IField[],
+    ) {
+    }
 }
