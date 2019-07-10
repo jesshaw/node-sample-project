@@ -20,7 +20,7 @@ export interface ISpider {
   id?: number;
   // placedTime?: Date;
   // status?: OrderStatus;
-  // code?: string;
+  code?: string;
   // deliveredTime?: Date;
   // channel?: Channel;
   // amount?: number;
@@ -39,7 +39,7 @@ export class Spider implements ISpider {
     public id?: number,
     // public placedTime?: Date,
     // public status?: OrderStatus,
-    // public code?: string,
+    public code?: string,
     // public deliveredTime?: Date,
     // public channel?: Channel,
     // public amount?: number,

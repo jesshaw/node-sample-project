@@ -1,8 +1,8 @@
 <template>
-    <div class="home">
-        <img alt="Vue logo" src="../assets/logo.png">
+    <div class="spider">
+
     </div>
 </template>
-<script lang="ts" src="./home.component.ts">
+<script lang="ts" src="./spider.component.ts">
 
 </script>
