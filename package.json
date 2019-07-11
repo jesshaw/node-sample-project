@@ -1,0 +1,7 @@
+{
+  "name": "node-sample-project",
+  "version": "0.1.0",
+  "devDependencies": {
+    "typescript": "^3.4.3"
+  }
+}

@@ -1,8 +1,10 @@
+/* tslint:disable:no-empty */
+
 // import { IOrderItem } from '@/shared/model/order-item.model';
 // import { IPromotion } from '@/shared/model/promotion.model';
 // import { IStore } from '@/shared/model/store.model';
 // import { IStaff } from '@/shared/model/staff.model';
-// import { ICustomer } from '@/shared/model/customer.model';
+import { IField } from '@/shared/model/field.model';
 //
 // export const enum OrderStatus {
 //   PENDING = 'PENDING',
@@ -16,21 +18,6 @@
 //   OTHER = 'OTHER'
 // }
 
-export interface IField {
-    key?: string;
-    value?: string;
-    keyDesc?: string;
-}
-
-export class Field implements IField {
-    constructor(
-        key?: string,
-        value?: string,
-        keyDesc?: string,
-    ) {
-    }
-}
-
 export interface ISpider {
     url?: string;
     format?: string;
@@ -39,11 +26,8 @@ export interface ISpider {
 }
 
 export class Spider implements ISpider {
-    constructor(
-        url?: string,
-        format?: string,
-        repeat?: string,
-        fields?: IField[],
-    ) {
-    }
+    constructor(url?: string,
+                format?: string,
+                repeat?: string,
+                fields?: IField[]) {}
 }

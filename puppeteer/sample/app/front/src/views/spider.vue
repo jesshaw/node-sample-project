@@ -20,7 +20,7 @@
                         <div>
                             <input id="url" type="url" name="url"
                                    required
-                                   :value="entity.url"/>
+                                   v-model="entity.url"/>
                         </div>
                         <div>
                             *
@@ -31,7 +31,7 @@
                         <div>
                             <input id="format" type="text" name="format"
                                    required
-                                   :value="entity.format"/>
+                                   v-model="entity.format"/>
                         </div>
                         <div>
                             *
@@ -42,7 +42,7 @@
                         <div>
                             <input id="repeat" type="text" name="repeat"
                                    required
-                                   :value="entity.format"/>
+                                   v-model="entity.repeat"/>
                         </div>
                         <div>
                             *
@@ -53,10 +53,13 @@
                         <div v-for="item in entity.fields">
                             <input type="text"
                                    required
-                                   :value="item.key"/>
+                                   v-model="item.key"/>
                             <input type="text"
                                    required
-                                   :value="item.value"/>
+                                   v-model="item.value"/>
+                            <input type="text"
+                                   required
+                                   v-model="item.keyDesc"/>
                         </div>
                         <div>
                             *

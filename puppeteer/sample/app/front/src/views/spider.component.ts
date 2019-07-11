@@ -11,12 +11,12 @@ export default class Spider extends Vue {
     // private removeId: string = null;
     public spiderDatas: any;
     public entity: ISpider = {
-        url: "",
-        format: "",
-        repeat: "",
-        fields: [{key: "", value: ""}],
+        url: '',
+        format: '',
+        repeat: '',
+        fields: [{key: '', value: ''}],
     };
-
+    //
     @Inject('spiderService')
     private spiderService: () => SpiderService;
     //
