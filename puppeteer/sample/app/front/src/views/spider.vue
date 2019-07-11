@@ -50,7 +50,7 @@
                     </div>
                     <div class="form-group">
                         <label for="repeat">fields</label>
-                        <div v-for="item in entity.fields">
+                        <div v-for="(item, index) in entity.fields">
                             <input type="text"
                                    required
                                    v-model="item.key"/>
@@ -60,6 +60,8 @@
                             <input type="text"
                                    required
                                    v-model="item.keyDesc"/>
+                            <button v-on:click="addField()">+</button>
+                            <button v-show="index!=0" v-on:click="removeField(index)">-</button>
                         </div>
                         <div>
                             *
@@ -75,6 +77,20 @@
                     </button>
                 </div>
             </form>
+        </div>
+        <div v-show="!!spiderDatas">
+            <table v-for="(item, index) in spiderDatas">
+                <tr v-if="index==0">
+                    <td v-for="(value, name) in item">
+                        {{ name }}
+                    </td>
+                </tr>
+                <tr>
+                    <td v-for="(value, name) in item">
+                        {{ value }}
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 </template>

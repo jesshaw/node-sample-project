@@ -7,8 +7,8 @@ const birds = require('./resources/birds');
 const spiders = require('./resources/spiders');
 
 app.use(express.static(path.join(__dirname, 'dist')));
-app.use('/birds', birds);
-app.use('/spiders', spiders);
+app.use('/api/birds', birds);
+app.use('/api/spiders', spiders);
 
 const server = app.listen(8888, function () {
     const host = server.address().address && "localhost";

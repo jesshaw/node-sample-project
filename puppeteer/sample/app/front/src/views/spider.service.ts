@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-import {ISpider} from '@/shared/model/spider.model';
-
 const baseApiUrl = 'api/spiders';
 
 export default class SpiderService {
@@ -29,7 +27,7 @@ export default class SpiderService {
     //   });
     // }
     //
-    public create(entity: ISpider): Promise<any> {
+    public create(entity: any): Promise<any> {
         return new Promise<any>((resolve) => axios.post(`${baseApiUrl}`, entity).then((res) => resolve(res)));
     }
 
