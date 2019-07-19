@@ -2,6 +2,7 @@ import {Component, ComponentFactoryResolver, Input, OnInit, ViewChild} from '@an
 
 import {DChartContentDirective} from './d-chart-content.directive';
 import {DChartItem} from './d-chart-item';
+import {BaseDChartComponent} from "./type/base-d-chart.component";
 
 // https://stackblitz.com/angular/oaeoqkjymjy?file=src%2Fapp%2Fad-banner.component.ts
 // https://raw.githubusercontent.com/swimlane/ngx-charts/master/demo/app.component.html
@@ -14,39 +15,31 @@ import {DChartItem} from './d-chart-item';
   styleUrls: ['./d-chart.component.css']
 })
 export class DChartComponent implements OnInit {
-  @Input() charSet: DChartItem;
-  currentAdIndex = -1;
-  @ViewChild(AdDirective, {static: true}) adHost: AdDirective;
-  interval: any;
+  @Input() dcharts: DChartItem;
 
-  constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
+  @ViewChild(DChartContentDirective, {static: true}) dChartContent: DChartContentDirective;
+
+  constructor(private componentFactoryResolver: ComponentFactoryResolver) {
+  }
 
   ngOnInit() {
     this.loadComponent();
-    this.getAds();
+    // this.getAds();
   }
 
   ngOnDestroy() {
-    clearInterval(this.interval);
+    // clearInterval(this.interval);
   }
 
   loadComponent() {
-    this.currentAdIndex = (this.currentAdIndex + 1) % this.ads.length;
-    let adItem = this.ads[this.currentAdIndex];
 
-    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(adItem.component);
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.dcharts.component);
 
-    let viewContainerRef = this.adHost.viewContainerRef;
+    let viewContainerRef = this.dChartContent.viewContainerRef;
     viewContainerRef.clear();
 
     let componentRef = viewContainerRef.createComponent(componentFactory);
-    (<AdComponent>componentRef.instance).data = adItem.data;
-  }
-
-  getAds() {
-    this.interval = setInterval(() => {
-      this.loadComponent();
-    }, 3000);
+    (<BaseDChartComponent>componentRef.instance).data = this.dcharts.data;
   }
 
 }
