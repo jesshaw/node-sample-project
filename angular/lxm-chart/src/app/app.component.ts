@@ -36,9 +36,7 @@ export class AppComponent implements OnInit {
     this.charts = this.chartService.getCharts();
 
     this.data = this.charts[0].data;
-    this.data.colorScheme = this.data.colorScheme || {
-      domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-    };
+    this.data.colorScheme = this.data.colorScheme || this.colorScheme;
     console.log(this.data);
   }
 }

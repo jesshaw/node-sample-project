@@ -9,6 +9,8 @@ import {DChartPieComponent} from './d-chart/type/d-chart-pie.component';
 import {ChartService} from './chart.service';
 import {NgxChartsModule} from "@swimlane/ngx-charts";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {DChartBarHorizontalComponent} from "./d-chart/type/d-chart-bar-horizontal.component";
+import {DCharLineComponent} from "./d-chart/type/d-chart-line.component";
 
 @NgModule({
   imports: [
@@ -21,10 +23,12 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     AppComponent,
     DChartComponent,
     DChartBarVerticalComponent,
+    DChartBarHorizontalComponent,
     DChartPieComponent,
+    DCharLineComponent,
     DChartContentDirective,
   ],
-  entryComponents: [DChartBarVerticalComponent, DChartPieComponent],
+  entryComponents: [DChartBarVerticalComponent,DChartBarHorizontalComponent, DChartPieComponent,DCharLineComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {
