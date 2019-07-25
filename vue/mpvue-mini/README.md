@@ -35,3 +35,19 @@ npm run build --report
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+
+
+##### ref
+
+[awesome-mpvue](https://github.com/mpvue/awesome-mpvue)
+
+[mpvue-weui](https://github.com/MPComponent/mpvue-weui)
+
+[douban demo](https://github.com/mini-mpvue/mpvue-douban)
+
+[meituan demo](https://github.com/WsmDyj/mpvue)
+
+
+
+
