@@ -24,6 +24,8 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "less": "^3.9.0",
+    "less-loader": "^5.0.0",
     "mpvue": "^2.0.6",
     "mpvue-weui": "^1.0.11",
     "vuex": "^3.0.1"
@@ -81,7 +83,8 @@
     "webpack-dev-middleware-hard-disk": "^1.12.1",
     "webpack-merge": "^4.1.0",
     "webpack-mpvue-asset-plugin": "^2.0.0",
-    "webpack-mpvue-vendor-plugin": "^2.0.0"
+    "webpack-mpvue-vendor-plugin": "^2.0.0",
+    "weui": "^2.0.1"
   },
   "engines": {
     "node": ">= 4.0.0",
