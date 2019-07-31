@@ -33,6 +33,7 @@
 <style lang="less">
   /*@import '../node_modules/weui/src/style/weui.less';*/
   @import '../node_modules/@wangdahoo/weui-less/src/weui.less';
+  @import '../static/style/var-color.less';
   /*@import '../node_modules/weui-wxss/src/style/weui.wxss';*/
 
   /*.container {*/
