@@ -10,6 +10,8 @@
         </div>
         <div class="weui-article__p">
           <button class="weui-btn" :type="type" :disabled="disabled" :plain="plain">{{btnMsg}}</button>
+        </div>
+        <div class="weui-article__p">
           <image class="weui-article__img" src="../../../static/images/pic_article.png" mode="aspectFit" style="height: 180px" />
           <image class="weui-article__img" src="../../../static/images/pic_article.png" mode="aspectFit" style="height: 180px" />
         </div>
